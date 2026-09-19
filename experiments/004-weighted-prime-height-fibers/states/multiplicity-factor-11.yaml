@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "004-weighted-prime-height-fibers"
+state_id: "multiplicity-factor-11"
+projection: "point-weight-to-full-fiber-mass"
+parameters:
+  height: 11
+question: "Welchen Faktor fügt die vergessene Faserkoordinate dem Basel-Gewicht hinzu?"
+expected:
+  point_weight: "1/121"
+  fiber_mass: "10/121"
+  multiplicity_factor: 10
+  decomposition: "10/121 = 1/11 − 1/121"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.fullFiberMass_eq_one_div_sub_one_div_sq"

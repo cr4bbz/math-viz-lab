@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "004-weighted-prime-height-fibers"
+state_id: "prime-filter-500"
+projection: "height-index-to-prime-filtered-fiber-mass"
+parameters:
+  cutoff: 500
+  filter: "Nat.Prime"
+question: "Kann der Primhöhenfilter die durch Fasermultiplizität entstandene Divergenz beseitigen?"
+expected:
+  prime_filtered_partial_sum_500: 1.6447353612407805
+  infinite_behavior: "not summable"
+  reason: "μ(H_p)=1/p−1/p² and the prime reciprocal series diverges"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.prime_fullFiberMass_not_summable"

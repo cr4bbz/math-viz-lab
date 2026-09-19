@@ -1,0 +1,15 @@
+schema_version: 1
+experiment_id: "004-weighted-prime-height-fibers"
+state_id: "weighted-fiber-11"
+projection: "positive-lattice-to-weighted-height-fiber"
+parameters:
+  height: 11
+  point_weight: "1/11²"
+question: "Wie wird aus zehn Gitterpunkten der Höhe 11 ein einziger gewichteter Faserbeitrag?"
+expected:
+  fiber_cardinality: 10
+  point_weight: "1/121"
+  fiber_mass: "10/121"
+  fiber_mass_decimal: 0.08264462809917356
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.visibleFiberMass_of_complete"

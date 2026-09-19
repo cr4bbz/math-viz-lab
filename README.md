@@ -156,6 +156,35 @@ Der erste Befehl öffnet alle vier Schritte gleichzeitig. Die Regler steuern
 Kurvenende `M`, ausgewählte Partialsumme `N` und den sichtbaren Indexradius `K`.
 Der zweite Befehl öffnet eine große Detailansicht der Restschranken.
 
+## Experiment 04: Gewichtete Primhöhenfasern
+
+Das vierte Experiment komponiert die Primhöhen-Geometrie aus Experiment 02 mit
+den Quadratreziproken aus Experiment 03. Jeder Punkt der Höhenfaser
+
+\[
+H_n=\{(a,b)\in\mathbb N_+^2\mid a+b=n\}
+\]
+
+erhält das Gewicht `1/n²`. Weil `|H_n|=n−1`, besitzt die ganze Faser die Masse
+
+\[
+\mu(H_n)=\frac{n-1}{n^2}=\frac1n-\frac1{n^2}.
+\]
+
+Die resultierende Reihe divergiert; selbst die Einschränkung auf Primhöhen ist
+nicht summierbar. Beide Aussagen sind in Lean geprüft.
+
+```powershell
+python experiments/004-weighted-prime-height-fibers/render.py
+python experiments/004-weighted-prime-height-fibers/render.py --step 4
+python experiments/004-weighted-prime-height-fibers/render.py --export
+python -m unittest discover -s experiments/004-weighted-prime-height-fibers/tests -v
+lake build
+```
+
+Der Standardstart zeigt alle vier Projektionen gleichzeitig. Die Regler koppeln
+Summengrenze `M` und ausgewählte Höhenfaser `n` über sämtliche Ansichten.
+
 ## Forschungsprotokolle
 
 Die ausführlichen didaktischen und mathematischen Herleitungen stehen in den
@@ -164,6 +193,7 @@ jeweiligen `ResearchNotes.md`-Dateien:
 - [`Experiment 01: kubische Fasern`](experiments/001-cubic-fibers/ResearchNotes.md)
 - [`Experiment 02: Primhöhen-Geometrie`](experiments/002-prime-height-geometry/ResearchNotes.md)
 - [`Experiment 03: Basel-Problem`](experiments/003-basel-problem/ResearchNotes.md)
+- [`Experiment 04: gewichtete Primhöhenfasern`](experiments/004-weighted-prime-height-fibers/ResearchNotes.md)
 
 Dort werden auch die Evidenzklassen und nächsten visualisierbaren
 Forschungsfragen festgehalten.
@@ -190,17 +220,25 @@ Forschungsfragen festgehalten.
 │   │   ├── renders/
 │   │   ├── tests/
 │   │   └── ResearchNotes.md
-│   └── 003-basel-problem/            Reziproke Quadratsumme
-│       ├── experiment.yaml
+│   ├── 003-basel-problem/            Reziproke Quadratsumme
+│   │   ├── experiment.yaml
+│   │   ├── states/
+│   │   ├── render.py
+│   │   ├── renders/
+│   │   ├── tests/
+│   │   └── ResearchNotes.md
+│   └── 004-weighted-prime-height-fibers/
+│       ├── experiment.yaml          Kompositions- und Evidenzmanifest
 │       ├── states/
-│       ├── render.py
+│       ├── render.py                Gekoppelte native Übersicht
 │       ├── renders/
 │       ├── tests/
 │       └── ResearchNotes.md
 ├── MathVizLab/
 │   ├── CubicFamily.lean             Geprüfte mathematische Aussagen
 │   ├── PrimeHeightGeometry.lean      Geprüfte Primhöhen-Geometrie
-│   └── BaselProblem.lean             Geprüfte Basel-Reihe
+│   ├── BaselProblem.lean             Geprüfte Basel-Reihe
+│   └── WeightedPrimeHeightFibers.lean
 ├── lakefile.lean
 ├── lean-toolchain
 ├── requirements.txt

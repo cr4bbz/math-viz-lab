@@ -1,0 +1,15 @@
+schema_version: 1
+experiment_id: "004-weighted-prime-height-fibers"
+state_id: "partial-sums-500"
+projection: "fiber-prefix-to-partial-sum"
+parameters:
+  cutoff: 500
+question: "Wie unterscheiden sich Basel-, harmonische und gewichtete Faserpartialsumme bei N=500?"
+expected:
+  basel_partial_sum: 1.642936065514894
+  harmonic_partial_sum: 6.79282342999052
+  fiber_partial_sum: 5.149887364475631
+  exact_relation: "T₅₀₀ = H₅₀₀ − S₅₀₀"
+  infinite_behavior: "fiber series is not summable"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.fiberMassPartialSum_eq_reciprocal_sub_basel / MathVizLab.fullFiberMass_not_summable"

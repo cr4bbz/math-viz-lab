@@ -1,0 +1,85 @@
+schema_version: 1
+
+experiment:
+  id: "004-weighted-prime-height-fibers"
+  title: "Basel-Gewichte auf Primhöhenfasern"
+  status: "active"
+
+lineage:
+  type: "composite_experiment"
+  parents:
+    - "002-prime-height-geometry"
+    - "003-basel-problem"
+
+object:
+  family: "H_n={(a,b)∈ℕ₊² | a+b=n} with point weight w(a,b)=1/n²"
+  parameter_space: "height n ∈ ℕ, summation cutoff N ∈ ℕ"
+  state_space: "positive lattice points (a,b), height fibers H_n, and prime-filtered heights"
+  solution_locus: "fiber masses μ(H_n)=(n−1)/n² and their partial sums"
+
+paths:
+  renderer: "experiments/004-weighted-prime-height-fibers/render.py"
+  lean_source: "MathVizLab/WeightedPrimeHeightFibers.lean"
+  notes: "experiments/004-weighted-prime-height-fibers/ResearchNotes.md"
+  states_dir: "experiments/004-weighted-prime-height-fibers/states"
+  renders_dir: "experiments/004-weighted-prime-height-fibers/renders"
+
+view:
+  projection_sequence:
+    - "lattice point (a,b) ↦ height n=a+b with fiber H_n"
+    - "constant point weight 1/n² ↦ total fiber mass |H_n|/n²"
+    - "fiber-mass prefix ↦ partial sum T_N=H_N−S_N"
+    - "height index n ↦ prime-filtered contribution 1_Prime(n)·μ(H_n)"
+  default_state: "weighted-fiber-11"
+
+research:
+  question: "Wie verändert die Fasermultiplizität |H_n|=n−1 das konvergente Basel-Gewicht 1/n², und bleibt die resultierende Reihe nach dem Primhöhenfilter summierbar?"
+  observations:
+    - id: "obs-multiplicity-11"
+      statement: "Auf H₁₁ werden zehn gleiche Punktgewichte 1/121 zur Fasermasse 10/121 akkumuliert."
+      evidence: "numerical_evidence"
+      state: "weighted-fiber-11"
+    - id: "obs-partial-sums-500"
+      statement: "Bis N=500 stabilisiert sich die Basel-Partialsumme sichtbar, während die Fasersumme weiter wächst."
+      evidence: "numerical_evidence"
+      state: "partial-sums-500"
+  conjectures: []
+  proved_claims:
+    - id: "claim-complete-visible-mass"
+      statement: "Für eine vollständig sichtbare Höhenfaser stimmt die sichtbare Masse mit (n−1)/n² überein."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.visibleFiberMass_of_complete"
+    - id: "claim-fiber-term-decomposition"
+      statement: "Für n≥1 gilt μ(H_n)=1/n−1/n²."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.fullFiberMass_eq_one_div_sub_one_div_sq"
+    - id: "claim-partial-sum-identity"
+      statement: "Endlich gilt T_N=H_N−S_N."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.fiberMassPartialSum_eq_reciprocal_sub_basel"
+    - id: "claim-full-divergence"
+      statement: "Die Reihe der vollständigen gewichteten Höhenfasern ist nicht summierbar."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.fullFiberMass_not_summable"
+    - id: "claim-prime-filter-divergence"
+      statement: "Auch die Teilreihe der gewichteten Primhöhenfasern ist nicht summierbar."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.prime_fullFiberMass_not_summable"
+
+render:
+  format: "svg"
+  browser_based: false
+  deterministic: true
+  native_interactive_overview: true
+  simultaneous_steps: [1, 2, 3, 4]
+  controls: ["summation cutoff M", "selected height n"]
+  axes_required: true
+  legends_required: true
+  equal_comparison_panels: true
+
+validation:
+  commands:
+    - "python .agents/skills/graphical-math-research/scripts/validate_experiment.py experiments/004-weighted-prime-height-fibers/experiment.yaml"
+    - "python experiments/004-weighted-prime-height-fibers/render.py --check-layout"
+    - "python -m unittest discover -s experiments/004-weighted-prime-height-fibers/tests -v"
+    - "lake build"
