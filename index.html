@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interaktives Mathematiklabor zu Projektionen und Fasern der kubischen Familie x³ − ax." />
+    <title>math-viz-lab · Kubische Fasern</title>
+    <link rel="stylesheet" href="web/styles.css?v=1" />
+  </head>
+  <body>
+    <a class="skip-link" href="#labor">Zum Labor springen</a>
+    <header class="hero">
+      <p class="eyebrow">math-viz-lab · Experiment 01</p>
+      <h1>Wo entstehen neue Nullstellen?</h1>
+      <p class="lede">
+        Wir untersuchen die Familie <span class="formula">F(a,x) = x³ − a·x</span>.
+        Jeder Schritt reduziert Information bewusst – und macht dadurch eine andere
+        mathematische Struktur sichtbar.
+      </p>
+      <div class="question" role="note">
+        <span class="question-mark" aria-hidden="true">?</span>
+        <p><strong>Forschungsfrage:</strong> Wie verändert sich die Faser der Nullstellen, wenn der Parameter <span class="formula">a</span> die Null überschreitet?</p>
+      </div>
+    </header>
+
+    <main id="labor" class="lab-shell">
+      <nav class="stepper" aria-label="Projektionsschritte">
+        <button class="step active" type="button" data-step="1" aria-current="step">
+          <span class="step-number">1</span><span><b>Termfeld</b><small>Vorzeichen lesen</small></span>
+        </button>
+        <span class="step-arrow" aria-hidden="true">→</span>
+        <button class="step" type="button" data-step="2">
+          <span class="step-number">2</span><span><b>Nullstellenmenge</b><small>Niveau 0 schneiden</small></span>
+        </button>
+        <span class="step-arrow" aria-hidden="true">→</span>
+        <button class="step" type="button" data-step="3">
+          <span class="step-number">3</span><span><b>Parameterfaser</b><small>auf a projizieren</small></span>
+        </button>
+        <span class="step-arrow" aria-hidden="true">→</span>
+        <button class="step" type="button" data-step="4">
+          <span class="step-number">4</span><span><b>Zustandsfaser</b><small>auf x projizieren</small></span>
+        </button>
+      </nav>
+
+      <section class="workspace" aria-labelledby="stage-title">
+        <div class="visual-column">
+          <div class="visual-heading">
+            <div>
+              <p id="stage-kicker" class="eyebrow">Schritt 1 · Ausgangsraum</p>
+              <h2 id="stage-title">Das Vorzeichenfeld des Terms</h2>
+            </div>
+            <div id="control-wrap" class="control-wrap" hidden>
+              <label id="slider-label" for="fiber-slider">Parameter a</label>
+              <output id="slider-output" for="fiber-slider">0,00</output>
+              <input id="fiber-slider" type="range" min="-2" max="4" step="0.1" value="0" />
+            </div>
+          </div>
+
+          <div class="plot-pair">
+            <figure class="plot-figure">
+              <svg id="main-plot" viewBox="0 0 720 520" role="img" aria-labelledby="main-plot-title main-plot-desc">
+                <title id="main-plot-title">Parameter-Zustands-Diagramm</title>
+                <desc id="main-plot-desc">Die horizontale Achse zeigt den Parameter a, die vertikale Achse den Zustand x.</desc>
+              </svg>
+              <figcaption id="main-caption">Farben codieren das Vorzeichen von F(a,x); die Grenze ist die Nullstellenmenge.</figcaption>
+            </figure>
+
+            <figure id="fiber-figure" class="plot-figure fiber-figure" hidden>
+              <svg id="fiber-plot" viewBox="0 0 470 360" role="img" aria-labelledby="fiber-plot-title fiber-plot-desc">
+                <title id="fiber-plot-title">Funktionsgraph einer Parameterfaser</title>
+                <desc id="fiber-plot-desc">Der Graph zeigt F(a,x) als Funktion von x für den gewählten Parameter.</desc>
+              </svg>
+              <figcaption id="fiber-caption">Die Schnittpunkte mit der waagerechten Achse sind die Elemente der Faser.</figcaption>
+            </figure>
+          </div>
+
+          <div id="legend" class="legend" aria-label="Legende"></div>
+        </div>
+
+        <aside class="notebook" aria-labelledby="notebook-title">
+          <p class="eyebrow">Forschungsnotiz</p>
+          <h2 id="notebook-title">Was wird sichtbar?</h2>
+          <div id="explanation" class="explanation" aria-live="polite"></div>
+
+          <section class="logic-box" aria-labelledby="logic-title">
+            <h3 id="logic-title">Logische Form</h3>
+            <p id="logic-formula" class="display-formula"></p>
+            <p id="logic-reading"></p>
+          </section>
+
+          <section class="lean-box" aria-labelledby="lean-title">
+            <div class="lean-heading">
+              <h3 id="lean-title">Lean-Anker</h3>
+              <span>maschinell prüfbar</span>
+            </div>
+            <code id="lean-theorem"></code>
+            <p id="lean-reading"></p>
+          </section>
+
+          <div class="navigation-actions">
+            <button id="prev-step" type="button" class="secondary-button">← Zurück</button>
+            <button id="next-step" type="button" class="primary-button">Weiter: Nullstellenmenge →</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="research-map" aria-labelledby="map-title">
+        <div>
+          <p class="eyebrow">Landkarte des Arguments</p>
+          <h2 id="map-title">Von einem Term zu zwei verschiedenen Faserfragen</h2>
+        </div>
+        <div class="map-flow" role="img" aria-label="F von a und x führt zur Nullstellenmenge V. Von V führt die Projektion auf a zu Nullstellen pro Parameter, die Projektion auf x zu Parametern pro Zustand.">
+          <div class="map-node"><small>Term</small><strong>F(a,x)</strong><span>Wert und Vorzeichen</span></div>
+          <span class="map-arrow" aria-hidden="true">→ <small>F = 0</small></span>
+          <div class="map-node accent"><small>Niveaumenge</small><strong>V ⊂ ℝ²</strong><span>Linie ∪ Parabel</span></div>
+          <div class="map-branches">
+            <span aria-hidden="true">↗</span><div class="map-node"><small>π<sub>a</sub>-Faser</small><strong>V<sub>a</sub></strong><span>Nullstellen bei festem a</span></div>
+            <span aria-hidden="true">↘</span><div class="map-node"><small>π<sub>x</sub>-Faser</small><strong>V<sup>x</sup></strong><span>Parameter bei festem x</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Experiment 01 · Visualisierung und Lean-Formalisierung beschreiben denselben mathematischen Gegenstand.</p>
+    </footer>
+    <script src="web/app.js?v=1"></script>
+  </body>
+</html>
