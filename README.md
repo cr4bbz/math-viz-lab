@@ -117,11 +117,16 @@ Abbildungen unterscheiden ausdrücklich zwischen diesem Indexabstand, dem
 euklidischen Abstand paralleler Geraden und Artefakten eines endlichen Fensters.
 
 ```powershell
-python experiments/002-prime-height-geometry/render.py --step 2
+python experiments/002-prime-height-geometry/render.py
 python .agents/skills/graphical-math-research/scripts/render_experiment.py experiments/002-prime-height-geometry/experiment.yaml
 python -m unittest discover -s experiments/002-prime-height-geometry/tests -v
 lake build
 ```
+
+Der erste Befehl öffnet eine native interaktive Übersicht mit allen vier
+Projektionsschritten gleichzeitig. Regler koppeln Fenstergröße `N`, ausgewählte
+Höhe `n` und das betrachtete aufeinanderfolgende Primzahlpaar. Eine einzelne
+Detailansicht bleibt beispielsweise mit `--step 3` verfügbar.
 
 Die Herleitung und Evidenzklassifikation stehen in
 [`experiments/002-prime-height-geometry/ResearchNotes.md`](experiments/002-prime-height-geometry/ResearchNotes.md).

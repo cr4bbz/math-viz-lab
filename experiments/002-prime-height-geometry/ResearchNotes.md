@@ -10,6 +10,13 @@ Die vorhandenen Browseransichten werden nicht übernommen. `math-viz-lab`
 erzeugt stattdessen feste, reproduzierbare SVG-Abbildungen mit Matplotlib und
 eine eigenständig geprüfte Lean-Datei.
 
+Der native Standardstart zeigt alle vier Projektionsschritte gleichzeitig in
+einem Fenster. Die Regler für Fenstergröße `N`, Höhenindex `n` und
+aufeinanderfolgendes Primzahlpaar aktualisieren sämtliche betroffenen Ansichten
+gemeinsam. Diese Reglerpositionen dienen der Exploration; ein dauerhaft
+relevanter Befund wird weiterhin als benannter Zustand unter `states/`
+gespeichert.
+
 ## 1. Forschungsfrage
 
 Auf dem positiven ganzzahligen Gitter betrachten wir die additive Höhe

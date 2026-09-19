@@ -27,6 +27,18 @@ Read this reference before creating or changing a renderer.
 - Do not use HTML or browser layout in this repository.
 - Rendered files must be reproducible from the manifest and selected state.
 
+## Native interaction
+
+- A multi-step renderer must open an overview of every projection step by
+  default, rather than requiring one process invocation per step.
+- Provide labelled native controls for the parameters shared across views and
+  update all affected panels together.
+- Keep a command-line route to a single detailed step and a deterministic
+  export route for every static figure.
+- Display current widget values, but treat them as exploratory. Persist a
+  mathematically relevant setting as a named YAML state before relying on it in
+  later work.
+
 ## Didactic layer
 
 Each render must expose the symbolic or logical statement being visualized and

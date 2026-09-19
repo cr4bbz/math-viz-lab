@@ -19,6 +19,13 @@ didactic explanation, and a checked Lean statement.
 - Keep observations, conjectures, and Lean-proved claims explicitly distinct.
 - Use deterministic, repository-native renderers. Do not build browser or HTML
   visualizations for this project.
+- A multi-step experiment must open a native interactive overview by default:
+  render every projection step at the same time and provide labelled controls
+  for the parameters that connect those views. A command-line option may still
+  open one detailed step, and deterministic static exports remain required.
+- Interactive controls are exploratory views of explicit parameters. Display
+  their current values, map stable findings to named YAML states, and never let
+  transient widget state become the only record of a result.
 - Label every plotted variable, axis, projection, fiber, color encoding, and
   exceptional case. Comparable panels must use equal physical dimensions unless
   the manifest documents a mathematical reason not to.

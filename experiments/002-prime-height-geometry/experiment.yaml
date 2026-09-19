@@ -57,6 +57,9 @@ render:
   format: "svg"
   browser_based: false
   deterministic: true
+  native_interactive_overview: true
+  simultaneous_steps: [1, 2, 3, 4]
+  controls: ["window N", "height n", "consecutive prime pair"]
   axes_required: true
   legends_required: true
   equal_comparison_panels: true

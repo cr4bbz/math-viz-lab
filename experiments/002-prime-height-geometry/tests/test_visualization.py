@@ -11,6 +11,7 @@ EXPERIMENT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(EXPERIMENT_DIR))
 
 from render import (
+    InteractiveOverview,
     create_static_figure,
     full_positive_fiber,
     is_prime,
@@ -40,6 +41,18 @@ class PrimeHeightVisualizationTests(unittest.TestCase):
             self.assertAlmostEqual(left_box.width, right_box.width, places=12)
             self.assertAlmostEqual(left_box.height, right_box.height, places=12)
             plt.close(fig)
+
+    def test_interactive_overview_contains_and_updates_all_steps(self) -> None:
+        overview = InteractiveOverview()
+        self.assertEqual(set(overview.panels), {1, 2, 3, 4})
+        self.assertTrue(all(len(pair) == 2 for pair in overview.panels.values()))
+        overview.window_slider.set_val(12)
+        overview.height_slider.set_val(17)
+        overview.pair_slider.set_val(5)
+        self.assertIn("N=12", overview.status.get_text())
+        self.assertIn("n=17", overview.status.get_text())
+        self.assertIn("(13,17)", overview.status.get_text())
+        plt.close(overview.fig)
 
 
 if __name__ == "__main__":
