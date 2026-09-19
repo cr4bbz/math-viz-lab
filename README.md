@@ -191,6 +191,28 @@ von `s>1` für die Punktreihe auf `s>2` für die gewichtete Faserreihe sichtbar.
 python experiments/004-weighted-prime-height-fibers/render.py --step 5 --exponent 2.5
 ```
 
+## Experiment 05: Die Riemannsche Vermutung
+
+Das fünfte Experiment visualisiert die Riemannsche Zetafunktion, ohne die
+offene Vermutung mit endlicher numerischer Evidenz zu verwechseln. Fünf
+Projektionen führen von der Dirichlet-Reihe über analytische Fortsetzung und
+kritischen Streifen zur Hardy-Z-Funktion und schließlich zu einer expliziten
+Trennung von Beweis, numerischer Beobachtung und offener Vermutung.
+
+```powershell
+python -m pip install -r requirements.txt
+python experiments/005-riemann-hypothesis/render.py
+python experiments/005-riemann-hypothesis/render.py --step 3 --height 14.13
+python experiments/005-riemann-hypothesis/render.py --export
+python -m unittest discover -s experiments/005-riemann-hypothesis/tests -v
+lake build
+```
+
+Die Regler koppeln den Dirichlet-Cutoff `N`, die untersuchte Höhe `t` und die
+Anzahl `K` der aufgelisteten kritischen Nullstellen. Die Research Notes
+dokumentieren außerdem vier mögliche Kombinationen mit den Experimenten 002,
+003 und 004.
+
 ## Forschungsprotokolle
 
 Die ausführlichen didaktischen und mathematischen Herleitungen stehen in den
@@ -200,6 +222,7 @@ jeweiligen `ResearchNotes.md`-Dateien:
 - [`Experiment 02: Primhöhen-Geometrie`](experiments/002-prime-height-geometry/ResearchNotes.md)
 - [`Experiment 03: Basel-Problem`](experiments/003-basel-problem/ResearchNotes.md)
 - [`Experiment 04: gewichtete Primhöhenfasern`](experiments/004-weighted-prime-height-fibers/ResearchNotes.md)
+- [`Experiment 05: Riemannsche Vermutung`](experiments/005-riemann-hypothesis/ResearchNotes.md)
 
 Dort werden auch die Evidenzklassen und nächsten visualisierbaren
 Forschungsfragen festgehalten.
@@ -233,10 +256,17 @@ Forschungsfragen festgehalten.
 │   │   ├── renders/
 │   │   ├── tests/
 │   │   └── ResearchNotes.md
-│   └── 004-weighted-prime-height-fibers/
-│       ├── experiment.yaml          Kompositions- und Evidenzmanifest
+│   ├── 004-weighted-prime-height-fibers/
+│   │   ├── experiment.yaml          Kompositions- und Evidenzmanifest
+│   │   ├── states/
+│   │   ├── render.py                Gekoppelte native Übersicht
+│   │   ├── renders/
+│   │   ├── tests/
+│   │   └── ResearchNotes.md
+│   └── 005-riemann-hypothesis/
+│       ├── experiment.yaml          Evidenz- und Vermutungsmanifest
 │       ├── states/
-│       ├── render.py                Gekoppelte native Übersicht
+│       ├── render.py                Fünf gekoppelte native Ansichten
 │       ├── renders/
 │       ├── tests/
 │       └── ResearchNotes.md
@@ -244,7 +274,8 @@ Forschungsfragen festgehalten.
 │   ├── CubicFamily.lean             Geprüfte mathematische Aussagen
 │   ├── PrimeHeightGeometry.lean      Geprüfte Primhöhen-Geometrie
 │   ├── BaselProblem.lean             Geprüfte Basel-Reihe
-│   └── WeightedPrimeHeightFibers.lean
+│   ├── WeightedPrimeHeightFibers.lean
+│   └── RiemannHypothesis.lean       Formalisierte Grundlagen, kein RH-Beweis
 ├── lakefile.lean
 ├── lean-toolchain
 ├── requirements.txt

@@ -1,0 +1,18 @@
+schema_version: 1
+experiment_id: "005-riemann-hypothesis"
+state_id: "first-five-critical-line-zeros"
+projection: "critical-line-restriction-to-zero-heights"
+parameters:
+  count: 5
+  source: "mpmath.zetazero"
+question: "Wo liegen die ersten fünf von mpmath auf der kritischen Geraden aufgelisteten Nullstellenhöhen?"
+expected:
+  real_part: 0.5
+  positive_heights:
+    - 14.134725141734695
+    - 21.022039638771556
+    - 25.01085758014569
+    - 30.424876125859512
+    - 32.93506158773919
+  limitation: "the enumerator does not search for every possible off-line zero"
+evidence_status: "numerical_evidence"

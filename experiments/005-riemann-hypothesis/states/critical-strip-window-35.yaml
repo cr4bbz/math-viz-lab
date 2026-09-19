@@ -1,0 +1,15 @@
+schema_version: 1
+experiment_id: "005-riemann-hypothesis"
+state_id: "critical-strip-window-35"
+projection: "complex-zeta-value-to-log-magnitude"
+parameters:
+  sigma_domain: "0..1"
+  height_domain: "0..35"
+  selected_height: 14.13
+  grid: "61×141"
+question: "Welche Nullstellenkandidaten werden nach der Projektion ζ(s)↦log₁₀|ζ(s)| im endlichen kritischen Streifen sichtbar?"
+expected:
+  visible_minima: "near the critical line at low zero heights"
+  discarded_information: "complex phase of ζ(s)"
+  limitation: "finite raster cannot exclude off-line zeros"
+evidence_status: "numerical_evidence"

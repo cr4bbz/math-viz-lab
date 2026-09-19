@@ -1,0 +1,92 @@
+schema_version: 1
+
+experiment:
+  id: "005-riemann-hypothesis"
+  title: "Die Riemannsche Vermutung als visualisierbare Nullstellenfrage"
+  status: "active"
+
+relations:
+  builds_on:
+    - "003-basel-problem"
+  proposed_combinations:
+    - "002-prime-height-geometry"
+    - "004-weighted-prime-height-fibers"
+
+object:
+  family: "Riemann zeta function ζ(s) on s=σ+it ∈ ℂ"
+  parameter_space: "real part σ, height t, Dirichlet cutoff N, listed-zero count K"
+  state_space: "complex plane with pole s=1, trivial zeros, and nontrivial zero set"
+  solution_locus: "Z={s∈ℂ | ζ(s)=0}; conjecturally every nontrivial zero has σ=1/2"
+
+paths:
+  renderer: "experiments/005-riemann-hypothesis/render.py"
+  lean_source: "MathVizLab/RiemannHypothesis.lean"
+  notes: "experiments/005-riemann-hypothesis/ResearchNotes.md"
+  states_dir: "experiments/005-riemann-hypothesis/states"
+  renders_dir: "experiments/005-riemann-hypothesis/renders"
+
+view:
+  projection_sequence:
+    - "complex Dirichlet terms n^(−s) ↦ partial-sum path for Re(s)>1"
+    - "analytic continuation s↦ζ(s) with pole and trivial zeros"
+    - "complex value ζ(s) ↦ scalar magnitude log₁₀|ζ(s)| on the critical strip"
+    - "critical-line restriction s=1/2+it ↦ real Hardy function Z(t)"
+    - "finite listed zeros ↦ evidence-status decomposition, not universal proof"
+  default_state: "critical-strip-window-35"
+
+research:
+  question: "Wie lassen sich Definitionsbereich, kritischer Streifen, kritische Gerade und endliche Nullstellenevidenz so projizieren, dass die offene Riemannsche Vermutung nicht mit einer Bildbeobachtung verwechselt wird?"
+  observations:
+    - id: "obs-critical-strip-minima"
+      statement: "Im dargestellten Fenster bilden die aufgelisteten niedrigen Nullstellen dunkle Täler nahe σ=1/2."
+      evidence: "numerical_evidence"
+      state: "critical-strip-window-35"
+    - id: "obs-first-five-on-line"
+      statement: "Die ersten fünf von mpmath auf der kritischen Geraden aufgelisteten Nullstellen besitzen Realteil 1/2."
+      evidence: "numerical_evidence"
+      state: "first-five-critical-line-zeros"
+  conjectures:
+    - id: "conj-riemann-hypothesis"
+      statement: "Jede nichttriviale Nullstelle ρ der Riemannschen Zetafunktion erfüllt Re(ρ)=1/2."
+      evidence: "conjecture"
+      state: "riemann-hypothesis-open"
+      formal_statement: "RiemannHypothesis"
+  proved_claims:
+    - id: "claim-rh-formulation"
+      statement: "Die didaktische Nichttrivialitätsdefinition ergibt genau die mathlib-Formulierung der Riemannschen Vermutung."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.riemannHypothesis_iff_nontrivial_zeros_on_line"
+    - id: "claim-trivial-zeros"
+      statement: "Alle negativen geraden Zahlen −2(n+1) sind Zeta-Nullstellen."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.negative_even_is_zeta_zero"
+    - id: "claim-right-halfplane-nonzero"
+      statement: "Für Re(s)≥1 besitzt ζ keine Nullstelle."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.zeta_nonzero_of_one_le_re"
+    - id: "claim-compact-zero-finiteness"
+      statement: "Jedes kompakte Fenster enthält nur endlich viele Zeta-Nullstellen."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.compact_inter_zetaZeros_finite"
+    - id: "claim-basel-zeta-bridge"
+      statement: "Der Basel-Wert ist ζ(2)=π²/6."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.zeta_two_bridge"
+
+render:
+  format: "svg"
+  browser_based: false
+  deterministic: true
+  native_interactive_overview: true
+  simultaneous_steps: [1, 2, 3, 4, 5]
+  controls: ["Dirichlet cutoff N", "selected height t", "listed-zero count K"]
+  axes_required: true
+  legends_required: true
+  equal_comparison_panels: true
+
+validation:
+  commands:
+    - "python .agents/skills/graphical-math-research/scripts/validate_experiment.py experiments/005-riemann-hypothesis/experiment.yaml"
+    - "python experiments/005-riemann-hypothesis/render.py --check-layout"
+    - "python -m unittest discover -s experiments/005-riemann-hypothesis/tests -v"
+    - "lake build"

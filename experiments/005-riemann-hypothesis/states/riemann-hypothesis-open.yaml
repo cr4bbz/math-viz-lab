@@ -1,0 +1,12 @@
+schema_version: 1
+experiment_id: "005-riemann-hypothesis"
+state_id: "riemann-hypothesis-open"
+projection: "finite-zero-list-to-universal-quantified-claim"
+parameters:
+  quantified_domain: "all nontrivial zeros of ζ"
+question: "Welcher logische Schritt trennt endlich viele bestätigte kritische Nullstellen von der Riemannschen Vermutung?"
+expected:
+  finite_claim: "selected listed zeros satisfy Re(ρ)=1/2"
+  universal_claim: "∀ nontrivial zero ρ, Re(ρ)=1/2"
+  status: "open conjecture"
+evidence_status: "conjecture"

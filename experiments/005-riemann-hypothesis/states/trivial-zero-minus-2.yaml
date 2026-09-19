@@ -1,0 +1,13 @@
+schema_version: 1
+experiment_id: "005-riemann-hypothesis"
+state_id: "trivial-zero-minus-2"
+projection: "analytic-continuation-to-real-axis"
+parameters:
+  argument: -2
+question: "Welche Nullstellen sind bereits durch die analytische Struktur vollständig erklärt?"
+expected:
+  zeta_value: 0
+  zero_class: "trivial"
+  family: "−2(n+1), n∈ℕ"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.negative_even_is_zeta_zero"

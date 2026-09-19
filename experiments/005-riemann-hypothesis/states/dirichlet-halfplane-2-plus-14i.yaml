@@ -1,0 +1,15 @@
+schema_version: 1
+experiment_id: "005-riemann-hypothesis"
+state_id: "dirichlet-halfplane-2-plus-14i"
+projection: "dirichlet-terms-to-complex-partial-sum-path"
+parameters:
+  sigma: 2.0
+  height: 14.13
+  cutoff: 120
+question: "Wie nähert sich die komplexe Dirichlet-Reihe ζ(2+14.13i) innerhalb ihrer sicheren Konvergenzhalbebene?"
+expected:
+  domain_condition: "Re(s)>1"
+  path: "complex partial sums approach ζ(s)"
+  information_loss: "the path depends on term order while the limit does not record it"
+evidence_status: "lean_proved"
+lean_theorem: "zeta_eq_tsum_one_div_nat_add_one_cpow"
