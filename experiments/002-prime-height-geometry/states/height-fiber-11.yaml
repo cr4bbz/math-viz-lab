@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "002-prime-height-geometry"
+state_id: "height-fiber-11"
+projection: "height"
+parameters:
+  window: 16
+  height: 11
+question: "Welche Information bleibt in der Faser der Projektion (a,b)↦a+b bei n=11 erhalten?"
+expected:
+  full_fiber_cardinality: 10
+  visible_fiber_cardinality: 10
+  fiber_description: "{(a,11-a) | 1≤a≤10}"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.visibleHeightCardinality_of_complete"

@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "002-prime-height-geometry"
+state_id: "truncated-fiber-19"
+projection: "finite-window-height-fiber"
+parameters:
+  window: 16
+  height: 19
+question: "Warum sind im 16×16-Fenster nur 14 der 18 positiven Zerlegungen von 19 sichtbar?"
+expected:
+  full_fiber_cardinality: 18
+  visible_fiber_cardinality: 14
+  omitted_points: 4
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.visibleHeightCardinality_of_truncated"

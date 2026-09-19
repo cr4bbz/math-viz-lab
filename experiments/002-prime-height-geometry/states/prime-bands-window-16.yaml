@@ -1,0 +1,12 @@
+schema_version: 1
+experiment_id: "002-prime-height-geometry"
+state_id: "prime-bands-window-16"
+projection: "prime-filter-after-height"
+parameters:
+  window: 16
+  height_domain: "2..32"
+question: "Welche diagonalen Höhenfasern werden im endlichen Fenster durch Primzahlen ausgewählt?"
+expected:
+  prime_heights: [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+  visual_form: "parallel diagonal bands"
+evidence_status: "numerical_evidence"

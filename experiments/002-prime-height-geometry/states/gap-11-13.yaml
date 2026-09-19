@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "002-prime-height-geometry"
+state_id: "gap-11-13"
+projection: "successive-prime-height-gap"
+parameters:
+  p: 11
+  q: 13
+question: "Wie unterscheiden sich ganzzahliger Bandabstand und euklidische Distanz der Primhöhenfasern 11 und 13?"
+expected:
+  band_gap: 2
+  separator_count: 1
+  euclidean_distance: "√2"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.eleven_thirteen_prime_gap / bandNormalDistance_eleven_thirteen"

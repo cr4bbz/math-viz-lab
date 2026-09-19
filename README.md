@@ -101,12 +101,41 @@ Formalisiert sind:
 3. die Zustandsfaser über `x = 0` sowie über `x ≠ 0`,
 4. die paarweise Verschiedenheit der drei positiven Wurzeln.
 
-## Forschungsprotokoll
+## Experiment 02: Primhöhen-Geometrie
 
-Die ausführliche didaktische und mathematische Herleitung steht in
-[`experiments/001-cubic-fibers/ResearchNotes.md`](experiments/001-cubic-fibers/ResearchNotes.md).
-Dort werden auch nächste
-visualisierbare Forschungsfragen formuliert.
+Das zweite Experiment adaptiert die Primhöhen-Forschung aus dem Schwesterprojekt
+[`math-lab`](https://github.com/cr4bbz/math-lab). Auf dem positiven Gitter wird
+die Projektion
+
+\[
+\pi_h(a,b)=a+b
+\]
+
+untersucht. Ihre Fasern sind Diagonalen; Primzahlen wählen bestimmte
+Höhenbänder aus, und Primzahllücken werden zu Abständen ihrer Höhenindizes. Die
+Abbildungen unterscheiden ausdrücklich zwischen diesem Indexabstand, dem
+euklidischen Abstand paralleler Geraden und Artefakten eines endlichen Fensters.
+
+```powershell
+python experiments/002-prime-height-geometry/render.py --step 2
+python .agents/skills/graphical-math-research/scripts/render_experiment.py experiments/002-prime-height-geometry/experiment.yaml
+python -m unittest discover -s experiments/002-prime-height-geometry/tests -v
+lake build
+```
+
+Die Herleitung und Evidenzklassifikation stehen in
+[`experiments/002-prime-height-geometry/ResearchNotes.md`](experiments/002-prime-height-geometry/ResearchNotes.md).
+
+## Forschungsprotokolle
+
+Die ausführlichen didaktischen und mathematischen Herleitungen stehen in den
+jeweiligen `ResearchNotes.md`-Dateien:
+
+- [`Experiment 01: kubische Fasern`](experiments/001-cubic-fibers/ResearchNotes.md)
+- [`Experiment 02: Primhöhen-Geometrie`](experiments/002-prime-height-geometry/ResearchNotes.md)
+
+Dort werden auch die Evidenzklassen und nächsten visualisierbaren
+Forschungsfragen festgehalten.
 
 ## Struktur
 
@@ -116,15 +145,23 @@ visualisierbare Forschungsfragen formuliert.
 ├── .agents/skills/
 │   └── graphical-math-research/     Wiederverwendbarer Forschungsablauf
 ├── experiments/
-│   └── 001-cubic-fibers/
-│       ├── experiment.yaml          Gemeinsamer Forschungszustand
-│       ├── states/                  Benannte, erhaltende Zustände
-│       ├── render.py                Natives Labor und SVG-Export
-│       ├── renders/                 Reproduzierbare Abbildungen
-│       ├── tests/                   Layout- und Renderprüfungen
-│       └── ResearchNotes.md         Didaktisches Forschungsprotokoll
+│   ├── 001-cubic-fibers/
+│   │   ├── experiment.yaml          Gemeinsamer Forschungszustand
+│   │   ├── states/                  Benannte, erhaltende Zustände
+│   │   ├── render.py                Natives Labor und SVG-Export
+│   │   ├── renders/                 Reproduzierbare Abbildungen
+│   │   ├── tests/                   Layout- und Renderprüfungen
+│   │   └── ResearchNotes.md         Didaktisches Forschungsprotokoll
+│   └── 002-prime-height-geometry/    Geometrie der Primhöhen
+│       ├── experiment.yaml
+│       ├── states/
+│       ├── render.py
+│       ├── renders/
+│       ├── tests/
+│       └── ResearchNotes.md
 ├── MathVizLab/
-│   └── CubicFamily.lean             Geprüfte mathematische Aussagen
+│   ├── CubicFamily.lean             Geprüfte mathematische Aussagen
+│   └── PrimeHeightGeometry.lean      Geprüfte Primhöhen-Geometrie
 ├── lakefile.lean
 ├── lean-toolchain
 ├── requirements.txt
