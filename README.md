@@ -131,6 +131,31 @@ Detailansicht bleibt beispielsweise mit `--step 3` verfügbar.
 Die Herleitung und Evidenzklassifikation stehen in
 [`experiments/002-prime-height-geometry/ResearchNotes.md`](experiments/002-prime-height-geometry/ResearchNotes.md).
 
+## Experiment 03: Das Basel-Problem
+
+Das dritte Experiment untersucht die Reihe
+
+\[
+\sum_{n=1}^{\infty}\frac1{n^2}=\frac{\pi^2}{6}
+\]
+
+als Folge von vier Projektionen: vom Index zum Quadratreziproken, von den
+Einzeltermen zur Partialsumme, von der Partialsumme zum Restfehler und von
+positiven Indizes zur symmetrischen Domäne `ℤ∖{0}`. Der letzte Schritt klärt,
+dass die ganzzahlige Variante wegen der Paare `±n` den Wert `π²/3` besitzt.
+
+```powershell
+python experiments/003-basel-problem/render.py
+python experiments/003-basel-problem/render.py --step 3
+python experiments/003-basel-problem/render.py --export
+python -m unittest discover -s experiments/003-basel-problem/tests -v
+lake build
+```
+
+Der erste Befehl öffnet alle vier Schritte gleichzeitig. Die Regler steuern
+Kurvenende `M`, ausgewählte Partialsumme `N` und den sichtbaren Indexradius `K`.
+Der zweite Befehl öffnet eine große Detailansicht der Restschranken.
+
 ## Forschungsprotokolle
 
 Die ausführlichen didaktischen und mathematischen Herleitungen stehen in den
@@ -138,6 +163,7 @@ jeweiligen `ResearchNotes.md`-Dateien:
 
 - [`Experiment 01: kubische Fasern`](experiments/001-cubic-fibers/ResearchNotes.md)
 - [`Experiment 02: Primhöhen-Geometrie`](experiments/002-prime-height-geometry/ResearchNotes.md)
+- [`Experiment 03: Basel-Problem`](experiments/003-basel-problem/ResearchNotes.md)
 
 Dort werden auch die Evidenzklassen und nächsten visualisierbaren
 Forschungsfragen festgehalten.
@@ -157,7 +183,14 @@ Forschungsfragen festgehalten.
 │   │   ├── renders/                 Reproduzierbare Abbildungen
 │   │   ├── tests/                   Layout- und Renderprüfungen
 │   │   └── ResearchNotes.md         Didaktisches Forschungsprotokoll
-│   └── 002-prime-height-geometry/    Geometrie der Primhöhen
+│   ├── 002-prime-height-geometry/    Geometrie der Primhöhen
+│   │   ├── experiment.yaml
+│   │   ├── states/
+│   │   ├── render.py
+│   │   ├── renders/
+│   │   ├── tests/
+│   │   └── ResearchNotes.md
+│   └── 003-basel-problem/            Reziproke Quadratsumme
 │       ├── experiment.yaml
 │       ├── states/
 │       ├── render.py
@@ -166,7 +199,8 @@ Forschungsfragen festgehalten.
 │       └── ResearchNotes.md
 ├── MathVizLab/
 │   ├── CubicFamily.lean             Geprüfte mathematische Aussagen
-│   └── PrimeHeightGeometry.lean      Geprüfte Primhöhen-Geometrie
+│   ├── PrimeHeightGeometry.lean      Geprüfte Primhöhen-Geometrie
+│   └── BaselProblem.lean             Geprüfte Basel-Reihe
 ├── lakefile.lean
 ├── lean-toolchain
 ├── requirements.txt

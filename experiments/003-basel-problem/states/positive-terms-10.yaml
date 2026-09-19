@@ -1,0 +1,13 @@
+schema_version: 1
+experiment_id: "003-basel-problem"
+state_id: "positive-terms-10"
+projection: "positive-index-to-square-reciprocal"
+parameters:
+  visible_terms: 10
+  index_domain: "ℕ₊"
+question: "Wie lässt sich der einzelne Summand 1/n² zugleich arithmetisch und geometrisch lesen?"
+expected:
+  first_terms: [1, "1/4", "1/9", "1/16"]
+  geometric_model: "one cell in an n×n subdivision of the unit square"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.baselTerm_of_pos"

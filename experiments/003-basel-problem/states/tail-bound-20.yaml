@@ -1,0 +1,13 @@
+schema_version: 1
+experiment_id: "003-basel-problem"
+state_id: "tail-bound-20"
+projection: "partial-sum-to-remainder"
+parameters:
+  selected_partial_sum: 20
+question: "Wo liegt der Rest R₂₀ relativ zu den beiden Integralvergleichsgrenzen?"
+expected:
+  lower_bound: 0.047619047619047616
+  tail_error: 0.04877082293520309
+  upper_bound: 0.05
+  relation: "1/21 ≤ R₂₀ ≤ 1/20"
+evidence_status: "numerical_evidence"

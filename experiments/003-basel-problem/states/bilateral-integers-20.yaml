@@ -1,0 +1,14 @@
+schema_version: 1
+experiment_id: "003-basel-problem"
+state_id: "bilateral-integers-20"
+projection: "integer-domain-to-sign-fiber"
+parameters:
+  positive_cutoff: 20
+  index_domain: "ℤ∖{0}"
+question: "Was ändert sich, wenn statt positiver Indizes alle von null verschiedenen ganzen Zahlen verwendet werden?"
+expected:
+  fiber_over_absolute_value: "{−n,n}"
+  bilateral_partial_sum: 3.1923264878260466
+  bilateral_limit: "π²/3"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.bilateralPartialSum_eq_two_mul / MathVizLab.bilateral_hasSum"

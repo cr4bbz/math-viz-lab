@@ -1,0 +1,71 @@
+schema_version: 1
+
+experiment:
+  id: "003-basel-problem"
+  title: "Das Basel-Problem: Quadratreziproken, Restterm und Ganzzahldomäne"
+  status: "active"
+
+object:
+  family: "a_n = 1/n² (Quadratreziproken)"
+  parameter_space: "summation cutoff N ∈ ℕ₊ and domain choice ℕ₊ or ℤ∖{0}"
+  state_space: "indices n ∈ ℕ₊, extended symmetrically to n ∈ ℤ∖{0}"
+  solution_locus: "partial sums S_N and their limit π²/6"
+
+paths:
+  renderer: "experiments/003-basel-problem/render.py"
+  lean_source: "MathVizLab/BaselProblem.lean"
+  notes: "experiments/003-basel-problem/ResearchNotes.md"
+  states_dir: "experiments/003-basel-problem/states"
+  renders_dir: "experiments/003-basel-problem/renders"
+
+view:
+  projection_sequence:
+    - "positive index n ↦ summand a_n=1/n² and square area"
+    - "finite prefix (a_1,…,a_N) ↦ partial sum S_N"
+    - "partial sum S_N ↦ remainder R_N=π²/6−S_N"
+    - "domain extension ℕ₊ ↦ ℤ∖{0} by the fibers {−n,n}"
+  default_state: "partial-sum-20"
+
+research:
+  question: "Wie machen geometrische Flächen, Partialsummen, Restschranken und die Faser {−n,n} den Wert und die Domänenabhängigkeit der Basel-Reihe sichtbar?"
+  observations:
+    - id: "obs-area-decay"
+      statement: "Der Summand 1/n² ist die Fläche eines von n² kongruenten Teilquadraten im Einheitsquadrat."
+      evidence: "visual_observation"
+      state: "positive-terms-10"
+    - id: "obs-tail-corridor-20"
+      statement: "Für N=20 liegt der numerisch berechnete Rest zwischen 1/(N+1) und 1/N."
+      evidence: "numerical_evidence"
+      state: "tail-bound-20"
+  conjectures: []
+  proved_claims:
+    - id: "claim-basel-limit"
+      statement: "Die Reihe über positive Indizes hat Summe π²/6."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.basel_hasSum"
+    - id: "claim-finite-bilateral-doubling"
+      statement: "Die symmetrische endliche Summe über ±1,…,±N ist das Doppelte der positiven Partialsumme."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.bilateralPartialSum_eq_two_mul"
+    - id: "claim-bilateral-limit"
+      statement: "Die Reihe über ℤ∖{0}, paarweise nach ±n geordnet, hat Summe π²/3."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.bilateral_hasSum"
+
+render:
+  format: "svg"
+  browser_based: false
+  deterministic: true
+  native_interactive_overview: true
+  simultaneous_steps: [1, 2, 3, 4]
+  controls: ["curve cutoff M", "partial sum N", "visible term radius K"]
+  axes_required: true
+  legends_required: true
+  equal_comparison_panels: true
+
+validation:
+  commands:
+    - "python .agents/skills/graphical-math-research/scripts/validate_experiment.py experiments/003-basel-problem/experiment.yaml"
+    - "python experiments/003-basel-problem/render.py --check-layout"
+    - "python -m unittest discover -s experiments/003-basel-problem/tests -v"
+    - "lake build"

@@ -1,0 +1,13 @@
+schema_version: 1
+experiment_id: "003-basel-problem"
+state_id: "partial-sum-20"
+projection: "finite-prefix-to-partial-sum"
+parameters:
+  cutoff: 200
+  selected_partial_sum: 20
+question: "Wie nah liegt S₂₀ bereits am Lean-bewiesenen Grenzwert π²/6?"
+expected:
+  partial_sum_20: 1.5961632439130233
+  limit: "π²/6"
+  tail_error_20: 0.04877082293520309
+evidence_status: "numerical_evidence"
