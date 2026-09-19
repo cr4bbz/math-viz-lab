@@ -1,5 +1,14 @@
 # Experiment 01: Kubische Fasern und ein Bifurkationswert
 
+## Darstellungsmedium
+
+Die Abbildungen werden mit Matplotlib als feste, reproduzierbare SVG-Grafiken
+erzeugt. Für die Exploration steht dasselbe Modell in einem nativen
+Matplotlib-Fenster zur Verfügung. Eine Browser- oder HTML-Oberfläche gehört
+nicht zum Experiment. Insbesondere verwenden die beiden Koordinatensysteme in
+Schritt 3 dieselben physischen Abmessungen; ein automatisierter Test sichert
+diese Layoutinvariante.
+
 ## 1. Die Forschungsfrage
 
 Für jeden reellen Parameter \(a\) betrachten wir die Funktion

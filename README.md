@@ -29,16 +29,18 @@ gibt es eine verschiedene reelle Nullstelle, für \(a>0\) drei. Die zweite
 Projektion entdeckt eine andere Besonderheit: Über \(x=0\) liegt die ganze
 Parameterachse, während jede Faser über \(x\ne0\) genau einen Punkt enthält.
 
-## Interaktive Visualisierung starten
+## Natives Forschungslabor starten
+
+Die Visualisierung ist bewusst **keine Webseite**. Sie läuft als lokales
+Matplotlib-Fenster mit festen Zeichenflächen; Browserbreite, CSS und responsive
+Layouts beeinflussen die Mathematik daher nicht.
 
 Im Repository:
 
 ```powershell
-python -m http.server 8000
+python -m pip install -r requirements.txt
+python cubic_fibers_lab.py
 ```
-
-Danach [http://localhost:8000](http://localhost:8000) öffnen. Die Anwendung
-benötigt keine Build-Werkzeuge und lädt keine externen Bibliotheken.
 
 Die vier nummerierten Schritte sind direkt anwählbar. In Schritt 3 und 4
 steuert ein Regler die untersuchte Faser. Jede Ansicht enthält:
@@ -47,6 +49,20 @@ steuert ein Regler die untersuchte Faser. Jede Ansicht enthält:
 - die jeweilige logische Formulierung,
 - eine didaktische Lesart,
 - den zugehörigen Lean-Satz.
+
+Die beiden Diagramme in Schritt 3 besitzen per Konstruktion exakt dieselbe
+Breite und Höhe. Das wird zusätzlich automatisiert getestet.
+
+## Reproduzierbare Abbildungen erzeugen
+
+Vier vollständig beschriftete SVG-Dateien werden unter `figures/` versioniert.
+Sie lassen sich jederzeit deterministisch neu erzeugen:
+
+```powershell
+python cubic_fibers_lab.py --export
+python cubic_fibers_lab.py --check-layout
+python -m unittest discover -s tests -v
+```
 
 ## Lean-Formalisierung prüfen
 
@@ -77,16 +93,17 @@ visualisierbare Forschungsfragen formuliert.
 
 ```text
 .
-├── index.html                       Interaktives Labor
-├── web/
-│   ├── app.js                       Projektionen, Fasern und Interaktion
-│   └── styles.css                   Responsives, zugängliches Layout
+├── cubic_fibers_lab.py              Natives Labor und SVG-Export
+├── figures/                         Reproduzierbare Forschungsabbildungen
+├── tests/
+│   └── test_visualization.py        Größen- und Renderprüfungen
 ├── MathVizLab/
 │   └── CubicFamily.lean             Geprüfte mathematische Aussagen
 ├── docs/
 │   └── experiment-01.md             Didaktisches Forschungsprotokoll
 ├── lakefile.lean
 ├── lean-toolchain
+├── requirements.txt
 └── Main.lean
 ```
 
