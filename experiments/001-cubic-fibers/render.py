@@ -1,7 +1,8 @@
 """Native visual research lab for the family F(a, x) = x³ - a·x.
 
-Run without arguments to open the Matplotlib desktop lab.  Use ``--export``
-to regenerate the reproducible SVG figures in ``figures/``.
+Run without arguments to open the Matplotlib desktop lab. Use ``--export``
+to regenerate the reproducible SVG figures in this experiment's ``renders/``
+directory.
 """
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ from matplotlib.widgets import Button, Slider
 import numpy as np
 
 matplotlib.rcParams["svg.hashsalt"] = "math-viz-lab"
+
+EXPERIMENT_DIR = Path(__file__).resolve().parent
 
 INK = "#10233f"
 MUTED = "#5f6f82"
@@ -89,7 +92,7 @@ def _new_canvas(step: int) -> tuple[Figure, Axes, Axes]:
 
     fig = plt.figure(figsize=(14, 7.5), facecolor=PAPER)
     # Fixed rectangles avoid layout-engine changes caused by different tick-label
-    # widths. This equality is asserted in tests/test_visualization.py.
+    # widths. This equality is asserted in this experiment's visualization test.
     left = fig.add_axes((0.07, 0.19, 0.39, 0.67), facecolor=SURFACE)
     right = fig.add_axes((0.56, 0.19, 0.39, 0.67), facecolor=SURFACE)
     fig.text(0.07, 0.945, "MATH-VIZ-LAB · EXPERIMENT 01", color=ORANGE,
@@ -400,7 +403,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--export", action="store_true", help="regenerate SVG figures")
     parser.add_argument("--check-layout", action="store_true", help="verify equal step-3 panels")
-    parser.add_argument("--output", type=Path, default=Path("figures"), help="export directory")
+    parser.add_argument("--output", type=Path, default=EXPERIMENT_DIR / "renders",
+                        help="export directory")
     args = parser.parse_args()
     if args.export:
         export_figures(args.output)

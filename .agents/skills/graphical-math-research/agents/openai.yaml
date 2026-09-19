@@ -1,0 +1,4 @@
+interface:
+  display_name: "Graphical Math Research"
+  short_description: "Versioned visual mathematics with Lean"
+  default_prompt: "Use $graphical-math-research to investigate a mathematical projection or fiber reproducibly."

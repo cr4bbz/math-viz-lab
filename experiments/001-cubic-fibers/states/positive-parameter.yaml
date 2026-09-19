@@ -1,0 +1,12 @@
+schema_version: 1
+experiment_id: "001-cubic-fibers"
+state_id: "positive-parameter"
+projection: "parameter"
+parameters:
+  a: 1.0
+question: "Warum enthält die Parameterfaser für a>0 drei verschiedene reelle Punkte?"
+expected:
+  distinct_real_roots: 3
+  fiber: "{0, √a, -√a}"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.parameterFiber_of_pos"

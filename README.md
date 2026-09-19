@@ -29,6 +29,22 @@ gibt es eine verschiedene reelle Nullstelle, für \(a>0\) drei. Die zweite
 Projektion entdeckt eine andere Besonderheit: Über \(x=0\) liegt die ganze
 Parameterachse, während jede Faser über \(x\ne0\) genau einen Punkt enthält.
 
+## Nachhaltiger Forschungsablauf
+
+Das Repository enthält einen lokalen Codex-Skill unter
+`.agents/skills/graphical-math-research` und verbindliche Projektregeln in
+`AGENTS.md`. Ein Experiment wird nicht durch einen flüchtigen GUI-Zustand,
+sondern durch `experiment.yaml` und benannte Zustände unter `states/`
+repräsentiert.
+
+Für Forschungsbeiträge kann der Skill explizit aufgerufen werden:
+
+```text
+$graphical-math-research Untersuche die Parameterfaser nahe a=0.
+```
+
+Der Skill kann bei passenden Aufgaben auch automatisch ausgewählt werden.
+
 ## Natives Forschungslabor starten
 
 Die Visualisierung ist bewusst **keine Webseite**. Sie läuft als lokales
@@ -39,7 +55,7 @@ Im Repository:
 
 ```powershell
 python -m pip install -r requirements.txt
-python cubic_fibers_lab.py
+python experiments/001-cubic-fibers/render.py
 ```
 
 Die vier nummerierten Schritte sind direkt anwählbar. In Schritt 3 und 4
@@ -55,13 +71,15 @@ Breite und Höhe. Das wird zusätzlich automatisiert getestet.
 
 ## Reproduzierbare Abbildungen erzeugen
 
-Vier vollständig beschriftete SVG-Dateien werden unter `figures/` versioniert.
+Vier vollständig beschriftete SVG-Dateien werden unter
+`experiments/001-cubic-fibers/renders/` versioniert.
 Sie lassen sich jederzeit deterministisch neu erzeugen:
 
 ```powershell
-python cubic_fibers_lab.py --export
-python cubic_fibers_lab.py --check-layout
-python -m unittest discover -s tests -v
+python .agents/skills/graphical-math-research/scripts/validate_experiment.py --all
+python .agents/skills/graphical-math-research/scripts/render_experiment.py experiments/001-cubic-fibers/experiment.yaml
+python experiments/001-cubic-fibers/render.py --check-layout
+python -m unittest discover -s experiments/001-cubic-fibers/tests -v
 ```
 
 ## Lean-Formalisierung prüfen
@@ -86,21 +104,27 @@ Formalisiert sind:
 ## Forschungsprotokoll
 
 Die ausführliche didaktische und mathematische Herleitung steht in
-[`docs/experiment-01.md`](docs/experiment-01.md). Dort werden auch nächste
+[`experiments/001-cubic-fibers/ResearchNotes.md`](experiments/001-cubic-fibers/ResearchNotes.md).
+Dort werden auch nächste
 visualisierbare Forschungsfragen formuliert.
 
 ## Struktur
 
 ```text
 .
-├── cubic_fibers_lab.py              Natives Labor und SVG-Export
-├── figures/                         Reproduzierbare Forschungsabbildungen
-├── tests/
-│   └── test_visualization.py        Größen- und Renderprüfungen
+├── AGENTS.md                        Verbindlicher Forschungsvertrag
+├── .agents/skills/
+│   └── graphical-math-research/     Wiederverwendbarer Forschungsablauf
+├── experiments/
+│   └── 001-cubic-fibers/
+│       ├── experiment.yaml          Gemeinsamer Forschungszustand
+│       ├── states/                  Benannte, erhaltende Zustände
+│       ├── render.py                Natives Labor und SVG-Export
+│       ├── renders/                 Reproduzierbare Abbildungen
+│       ├── tests/                   Layout- und Renderprüfungen
+│       └── ResearchNotes.md         Didaktisches Forschungsprotokoll
 ├── MathVizLab/
 │   └── CubicFamily.lean             Geprüfte mathematische Aussagen
-├── docs/
-│   └── experiment-01.md             Didaktisches Forschungsprotokoll
 ├── lakefile.lean
 ├── lean-toolchain
 ├── requirements.txt

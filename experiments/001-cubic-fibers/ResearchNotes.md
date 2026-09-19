@@ -23,6 +23,18 @@ Parameter geometrisch zusammen?** Erst danach projizieren wir diese Gesamtform
 wieder auf einzelne Koordinaten. Diese Reihenfolge ist wichtig, weil sie die
 Stellen sichtbar macht, an denen sich Fasern qualitativ ändern.
 
+### Versionierte Forschungszustände
+
+| Zustand | Projektion | Parameter | Evidenzstatus | Lean-Anker |
+|---|---|---:|---|---|
+| `negative-parameter` | \(\pi_a\) | \(a=-1\) | `lean_proved` | `parameterFiber_of_neg` |
+| `critical-parameter` | \(\pi_a\) | \(a=0\) | `lean_proved` | `parameterFiber_at_zero` |
+| `positive-parameter` | \(\pi_a\) | \(a=1\) | `lean_proved` | `parameterFiber_of_pos` |
+| `exceptional-state-fiber` | \(\pi_x\) | \(x=0\) | `lean_proved` | `stateFiber_at_zero` |
+
+Diese Dateien unter `states/` sind die rekonstruierbaren Forschungszustände.
+Reglerpositionen im nativen Labor sind dagegen nur temporäre Exploration.
+
 ## 2. Drei Darstellungsebenen
 
 Das Experiment hält drei Repräsentationen synchron:

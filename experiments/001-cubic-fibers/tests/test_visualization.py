@@ -1,11 +1,16 @@
 import unittest
+from pathlib import Path
+import sys
 
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from cubic_fibers_lab import create_static_figure, roots_for
+EXPERIMENT_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(EXPERIMENT_DIR))
+
+from render import create_static_figure, roots_for
 
 
 class CubicFibersVisualizationTests(unittest.TestCase):

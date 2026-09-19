@@ -1,0 +1,40 @@
+schema_version: 1
+
+experiment:
+  id: "NNN-short-name"
+  title: "Human-readable title"
+  status: "draft"
+
+object:
+  family: "F(parameters, state) = ..."
+  parameter_space: "..."
+  state_space: "..."
+  solution_locus: "V = {...}"
+
+paths:
+  renderer: "experiments/NNN-short-name/render.py"
+  lean_source: "MathVizLab/Example.lean"
+  notes: "experiments/NNN-short-name/ResearchNotes.md"
+  states_dir: "experiments/NNN-short-name/states"
+  renders_dir: "experiments/NNN-short-name/renders"
+
+view:
+  projection_sequence: []
+  default_state: "initial"
+
+research:
+  question: "One focused mathematical question"
+  observations: []
+  conjectures: []
+  proved_claims: []
+
+render:
+  format: "svg"
+  browser_based: false
+  deterministic: true
+  axes_required: true
+  legends_required: true
+  equal_comparison_panels: true
+
+validation:
+  commands: []

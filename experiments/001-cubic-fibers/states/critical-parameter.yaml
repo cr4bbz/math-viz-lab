@@ -1,0 +1,13 @@
+schema_version: 1
+experiment_id: "001-cubic-fibers"
+state_id: "critical-parameter"
+projection: "parameter"
+parameters:
+  a: 0.0
+question: "Wie fallen am Bifurkationswert drei algebraische Äste in einem Mengenpunkt zusammen?"
+expected:
+  distinct_real_roots: 1
+  algebraic_multiplicity_at_zero: 3
+  fiber: "{0}"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.parameterFiber_at_zero"

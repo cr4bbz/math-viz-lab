@@ -1,0 +1,12 @@
+schema_version: 1
+experiment_id: "001-cubic-fibers"
+state_id: "negative-parameter"
+projection: "parameter"
+parameters:
+  a: -1.0
+question: "Warum enthält die reelle Parameterfaser für a<0 nur x=0?"
+expected:
+  distinct_real_roots: 1
+  fiber: "{0}"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.parameterFiber_of_neg"

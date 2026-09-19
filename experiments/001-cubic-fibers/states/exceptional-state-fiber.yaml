@@ -1,0 +1,12 @@
+schema_version: 1
+experiment_id: "001-cubic-fibers"
+state_id: "exceptional-state-fiber"
+projection: "state"
+parameters:
+  x: 0.0
+question: "Warum springt die x-Faser bei x=0 von einem Punkt zu einer ganzen Geraden?"
+expected:
+  fiber_dimension: 1
+  fiber: "ℝ"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.stateFiber_at_zero"
