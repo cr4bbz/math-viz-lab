@@ -182,8 +182,14 @@ python -m unittest discover -s experiments/004-weighted-prime-height-fibers/test
 lake build
 ```
 
-Der Standardstart zeigt alle vier Projektionen gleichzeitig. Die Regler koppeln
-Summengrenze `M` und ausgewählte Höhenfaser `n` über sämtliche Ansichten.
+Der Standardstart zeigt alle fünf Projektionen gleichzeitig. Die Regler koppeln
+Summengrenze `M`, ausgewählte Höhenfaser `n` und den freien Exponenten `s` über
+die betroffenen Ansichten. Schritt 5 macht die Verschiebung der Konvergenzschwelle
+von `s>1` für die Punktreihe auf `s>2` für die gewichtete Faserreihe sichtbar.
+
+```powershell
+python experiments/004-weighted-prime-height-fibers/render.py --step 5 --exponent 2.5
+```
 
 ## Forschungsprotokolle
 

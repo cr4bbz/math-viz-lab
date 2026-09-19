@@ -18,6 +18,9 @@ from render import (
     fiber_cardinality,
     full_fiber_mass,
     is_prime,
+    exponent_classification,
+    power_fiber_mass,
+    power_weight,
     positive_height_fiber,
     series_data,
 )
@@ -50,8 +53,23 @@ class WeightedPrimeHeightFiberTests(unittest.TestCase):
         self.assertAlmostEqual(data.fiber_sums[-1], 5.149887364475631)
         self.assertAlmostEqual(data.prime_fiber_sums[-1], 1.6447353612407805)
 
+    def test_free_exponent_and_effective_decay(self) -> None:
+        n = 11
+        exponent = 2.5
+        self.assertAlmostEqual(power_weight(n, exponent), n ** (-exponent))
+        self.assertAlmostEqual(
+            power_fiber_mass(n, exponent),
+            n ** (1 - exponent) - n ** (-exponent),
+        )
+        self.assertEqual(exponent_classification(1.0), "beide Reihen divergent")
+        self.assertEqual(
+            exponent_classification(2.0),
+            "Punktreihe konvergent, Faserreihe divergent",
+        )
+        self.assertEqual(exponent_classification(2.5), "beide Reihen konvergent")
+
     def test_every_step_has_equal_comparison_panels(self) -> None:
-        for step in range(1, 5):
+        for step in range(1, 6):
             fig, (left, right) = create_static_figure(step)
             fig.canvas.draw()
             left_box = left.get_position()
@@ -62,12 +80,14 @@ class WeightedPrimeHeightFiberTests(unittest.TestCase):
 
     def test_interactive_overview_contains_and_updates_all_steps(self) -> None:
         overview = InteractiveOverview()
-        self.assertEqual(set(overview.panels), {1, 2, 3, 4})
+        self.assertEqual(set(overview.panels), {1, 2, 3, 4, 5})
         self.assertTrue(all(len(pair) == 2 for pair in overview.panels.values()))
         overview.cutoff_slider.set_val(1000)
         overview.selected_slider.set_val(17)
+        overview.exponent_slider.set_val(2.5)
         self.assertIn("M=1000", overview.status.get_text())
         self.assertIn("n=17", overview.status.get_text())
+        self.assertIn("s=2.5", overview.status.get_text())
         self.assertIn("|H_n|=16", overview.status.get_text())
         plt.close(overview.fig)
 

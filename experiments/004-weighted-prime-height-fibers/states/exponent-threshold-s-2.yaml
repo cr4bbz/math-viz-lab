@@ -1,0 +1,17 @@
+schema_version: 1
+experiment_id: "004-weighted-prime-height-fibers"
+state_id: "exponent-threshold-s-2"
+projection: "fixed-basel-exponent-to-free-power-exponent"
+parameters:
+  cutoff: 500
+  selected_exponent: 2.0
+  displayed_exponent_domain: "0.5..3.5"
+question: "Warum liegt die Konvergenzschwelle der gewichteten Höhenfasern bei s=2 statt bei s=1?"
+expected:
+  point_series_at_s_2: "summable"
+  fiber_series_at_s_2: "not summable"
+  transition_interval: "1<s≤2"
+  fiber_convergence_region: "s>2"
+  effective_decay: "n^(1−s)"
+evidence_status: "lean_proved"
+lean_theorem: "MathVizLab.powerPointTerm_summable_iff / MathVizLab.powerFiberTerm_summable_iff_of_one_lt"

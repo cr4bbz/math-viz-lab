@@ -87,6 +87,89 @@ theorem prime_fullFiberMass_not_summable :
     ring
   exact Nat.Primes.not_summable_one_div hreciprocal
 
+/-! ## Freier Exponent
+
+Für den reellen Exponenten `s` indexieren wir durch `k=n-1`. Dadurch ist die
+Höhe immer positiv (`n=k+1`) und die Fasermultiplizität genau `k`.
+-/
+
+/-- Punktgewicht `1/(k+1)^s` in der für reelle Exponenten geeigneten
+`rpow`-Schreibweise. -/
+noncomputable def powerPointTerm (s : ℝ) (k : ℕ) : ℝ :=
+  ((k + 1 : ℕ) : ℝ) ^ (-s)
+
+/-- Gesamtgewicht einer Faser der Höhe `k+1` mit `k` Punkten. -/
+noncomputable def powerFiberTerm (s : ℝ) (k : ℕ) : ℝ :=
+  (k : ℝ) * powerPointTerm s k
+
+/-- Die ungewichtete Potenzreihe über positive Höhen ist genau für `s>1`
+summierbar. -/
+theorem powerPointTerm_summable_iff (s : ℝ) :
+    Summable (powerPointTerm s) ↔ 1 < s := by
+  unfold powerPointTerm
+  have hshift :
+      (Summable (fun k : ℕ ↦ (((k + 1 : ℕ) : ℝ) ^ (-s)))) ↔
+        Summable (fun n : ℕ ↦ (n : ℝ) ^ (-s)) := by
+    simpa using
+      (summable_nat_add_iff (f := fun n : ℕ ↦ (n : ℝ) ^ (-s)) 1)
+  rw [hshift, Real.summable_nat_rpow]
+  constructor <;> intro h <;> linarith
+
+/-- Die Fasermultiplizität senkt den effektiven Exponenten von `s` auf
+`s-1`. -/
+theorem powerFiberTerm_decomposition (s : ℝ) (k : ℕ) :
+    powerFiberTerm s k =
+      (((k + 1 : ℕ) : ℝ) ^ (1 - s) - ((k + 1 : ℕ) : ℝ) ^ (-s)) := by
+  have hpos : 0 < (((k + 1 : ℕ) : ℝ)) := by positivity
+  rw [powerFiberTerm, powerPointTerm]
+  have hk : (k : ℝ) = ((k + 1 : ℕ) : ℝ) - 1 := by norm_num
+  rw [hk, sub_mul, one_mul]
+  rw [show 1 - s = 1 + (-s) by ring, Real.rpow_add hpos, Real.rpow_one]
+
+/-- Für `s>2` ist die gewichtete Faserreihe summierbar. -/
+theorem powerFiberTerm_summable_of_two_lt {s : ℝ} (hs : 2 < s) :
+    Summable (powerFiberTerm s) := by
+  have hlead0 : Summable (fun n : ℕ ↦ (n : ℝ) ^ (1 - s)) :=
+    Real.summable_nat_rpow.mpr (by linarith)
+  have htail0 : Summable (fun n : ℕ ↦ (n : ℝ) ^ (-s)) :=
+    Real.summable_nat_rpow.mpr (by linarith)
+  have hlead : Summable (fun k : ℕ ↦ (((k + 1 : ℕ) : ℝ) ^ (1 - s))) :=
+    (summable_nat_add_iff 1).2 hlead0
+  have htail : Summable (fun k : ℕ ↦ (((k + 1 : ℕ) : ℝ) ^ (-s))) :=
+    (summable_nat_add_iff 1).2 htail0
+  exact (hlead.sub htail).congr fun k ↦ (powerFiberTerm_decomposition s k).symm
+
+/-- Im Übergangsbereich `1<s≤2` konvergiert die ursprüngliche Potenzreihe,
+die gewichtete Faserreihe dagegen nicht. -/
+theorem powerFiberTerm_not_summable_of_one_lt_le_two {s : ℝ}
+    (h1 : 1 < s) (h2 : s ≤ 2) :
+    ¬ Summable (powerFiberTerm s) := by
+  intro hfiber
+  have htail0 : Summable (fun n : ℕ ↦ (n : ℝ) ^ (-s)) :=
+    Real.summable_nat_rpow.mpr (by linarith)
+  have htail : Summable (fun k : ℕ ↦ (((k + 1 : ℕ) : ℝ) ^ (-s))) :=
+    (summable_nat_add_iff 1).2 htail0
+  have hlead : Summable (fun k : ℕ ↦ (((k + 1 : ℕ) : ℝ) ^ (1 - s))) := by
+    refine (hfiber.add htail).congr ?_
+    intro k
+    rw [powerFiberTerm_decomposition]
+    ring
+  have hlead0 : Summable (fun n : ℕ ↦ (n : ℝ) ^ (1 - s)) :=
+    (summable_nat_add_iff 1).1 hlead
+  have hexponent : 1 - s < -1 := Real.summable_nat_rpow.mp hlead0
+  linarith
+
+/-- Innerhalb des Bereichs, in dem die Punktreihe bereits konvergiert, liegt
+die exakte Konvergenzschwelle der Faserreihe bei `s=2`. -/
+theorem powerFiberTerm_summable_iff_of_one_lt {s : ℝ} (h1 : 1 < s) :
+    Summable (powerFiberTerm s) ↔ 2 < s := by
+  constructor
+  · intro hsummable
+    by_contra hnot
+    exact powerFiberTerm_not_summable_of_one_lt_le_two h1 (le_of_not_gt hnot)
+      hsummable
+  · exact powerFiberTerm_summable_of_two_lt
+
 example : fullFiberMass 5 = 4 / 25 := by
   norm_num [fullFiberMass, baselTerm]
 

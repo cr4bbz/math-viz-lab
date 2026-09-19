@@ -21,6 +21,8 @@ if "--export" in sys.argv or "--check-layout" in sys.argv:
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch, Rectangle
 from matplotlib.widgets import Button, Slider
 import numpy as np
 
@@ -46,6 +48,7 @@ STEP_TITLES = {
     2: "2 · Multiplikation: Faserkardinalität verändert den Abfall",
     3: "3 · Akkumulation: Konvergente Reihe wird divergent",
     4: "4 · Primfilter: Nur Primhöhen, weiterhin divergent",
+    5: "5 · Exponentenprojektion: Die Konvergenzschwelle wandert",
 }
 
 STEP_NOTES = {
@@ -53,6 +56,7 @@ STEP_NOTES = {
     2: "Der Einzelindex trägt 1/n², die ganze Faser dagegen (n−1)/n²≈1/n.",
     3: "Die Fasersumme ist exakt H_N−S_N. Die wachsende Multiplizität zerstört die Basel-Konvergenz.",
     4: "Der Primfilter verwirft zusammengesetzte Höhen, doch Σₚ(p−1)/p² ist nicht summierbar.",
+    5: "Für 1<s≤2 konvergiert Σ1/nˢ, während die Faserreihe wegen μ_s(H_n)≈n¹⁻ˢ noch divergiert.",
 }
 
 STEP_LOGIC = {
@@ -60,6 +64,7 @@ STEP_LOGIC = {
     2: "Logik: μ(H_n)=(n−1)/n²=1/n−1/n²",
     3: "Logik: T_N=Σ_{n≤N}μ(H_n)=H_N−S_N",
     4: "Logik: Σ_{p prim} μ(H_p)=Σₚ(1/p−1/p²) divergiert",
+    5: "Logik: Σn⁻ˢ konvergiert ⇔ s>1; für s>1 gilt: Σ(n−1)n⁻ˢ konvergiert ⇔ s>2",
 }
 
 STEP_LEAN = {
@@ -67,6 +72,7 @@ STEP_LEAN = {
     2: "Lean: fullFiberMass_eq_one_div_sub_one_div_sq",
     3: "Lean: fiberMassPartialSum_eq_reciprocal_sub_basel / fullFiberMass_not_summable",
     4: "Lean: prime_fullFiberMass_not_summable",
+    5: "Lean: powerPointTerm_summable_iff / powerFiberTerm_summable_iff_of_one_lt",
 }
 
 
@@ -94,6 +100,24 @@ def fiber_cardinality(n: int) -> int:
 
 def full_fiber_mass(n: int) -> float:
     return fiber_cardinality(n) * basel_weight(n)
+
+
+def power_weight(n: int, exponent: float) -> float:
+    if n < 1:
+        raise ValueError("n must be positive")
+    return float(n ** (-exponent))
+
+
+def power_fiber_mass(n: int, exponent: float) -> float:
+    return fiber_cardinality(n) * power_weight(n, exponent)
+
+
+def exponent_classification(exponent: float) -> str:
+    if exponent <= 1:
+        return "beide Reihen divergent"
+    if exponent <= 2:
+        return "Punktreihe konvergent, Faserreihe divergent"
+    return "beide Reihen konvergent"
 
 
 def positive_height_fiber(n: int) -> list[tuple[int, int]]:
@@ -305,10 +329,69 @@ def _draw_step_4(left: Axes, right: Axes, data: SeriesData,
                fontsize=7 if compact else 10, fontweight="bold")
 
 
+def _draw_step_5(left: Axes, right: Axes, cutoff: int, exponent: float,
+                 *, compact: bool = False) -> None:
+    indices = np.arange(1, cutoff + 1, dtype=float)
+    point_terms = indices ** (-exponent)
+    fiber_terms = (indices - 1.0) * point_terms
+    point_sums = np.cumsum(point_terms)
+    fiber_sums = np.cumsum(fiber_terms)
+    left.semilogx(indices, point_sums, color=BLUE, linewidth=2.2,
+                  label=f"Punktreihe Σn⁻ˢ, s={exponent:.1f}")
+    left.semilogx(indices, fiber_sums, color=PURPLE, linewidth=2.5,
+                  label=f"Faserreihe Σ(n−1)n⁻ˢ, s={exponent:.1f}")
+    left.scatter([cutoff], [point_sums[-1]], color=BLUE, edgecolor=INK,
+                 s=28 if compact else 58, zorder=4)
+    left.scatter([cutoff], [fiber_sums[-1]], color=PURPLE, edgecolor=INK,
+                 s=28 if compact else 58, zorder=4)
+    left.text(0.03, 0.96, exponent_classification(exponent),
+              transform=left.transAxes, ha="left", va="top", color=GREEN,
+              fontsize=6.5 if compact else 9, fontweight="bold")
+    _style(left, "Summengrenze N (log)", "Partialsumme")
+    left.set_title("Gleicher Exponent, verschiedene Grenzfälle", color=INK,
+                   fontweight="bold")
+    left.legend(loc="upper left", bbox_to_anchor=(0, 0.86), frameon=True,
+                facecolor=SURFACE, fontsize=6 if compact else 8.5)
+
+    divergent = "#f3c1ad"
+    convergent = "#b8ddcf"
+    xmin, xmax = 0.5, 3.5
+    right.add_patch(Rectangle((xmin, 0.62), 0.5, 0.62,
+                              facecolor=divergent, edgecolor=INK, alpha=0.9))
+    right.add_patch(Rectangle((1.0, 0.62), xmax - 1.0, 0.62,
+                              facecolor=convergent, edgecolor=INK, alpha=0.9))
+    right.add_patch(Rectangle((xmin, -0.38), 1.5, 0.62,
+                              facecolor=divergent, edgecolor=INK, alpha=0.9))
+    right.add_patch(Rectangle((2.0, -0.38), xmax - 2.0, 0.62,
+                              facecolor=convergent, edgecolor=INK, alpha=0.9))
+    right.axvline(1.0, color=ORANGE, linestyle="--", linewidth=1.7,
+                  label="Punkt-Schwelle s=1")
+    right.axvline(2.0, color=PURPLE, linestyle=":", linewidth=2.1,
+                  label="Faser-Schwelle s=2")
+    right.axvline(exponent, color=INK, linewidth=2.2,
+                  label=f"gewählt: s={exponent:.1f}")
+    right.set_xlim(xmin, xmax)
+    right.set_ylim(-0.55, 1.42)
+    right.set_yticks([0, 1], labels=["Faserreihe", "Punktreihe"])
+    right.set_xticks(np.arange(0.5, 3.6, 0.5))
+    _style(right, "Exponent s", "untersuchte Reihe")
+    right.set_title("Konvergenzkarte des Exponenten", color=INK,
+                    fontweight="bold")
+    right.legend(handles=[Patch(facecolor=convergent, edgecolor=INK,
+                                label="konvergent"),
+                          Patch(facecolor=divergent, edgecolor=INK,
+                                label="divergent"),
+                          Line2D([], [], color=INK, linewidth=2.2,
+                                 label=f"gewählt: s={exponent:.1f}")],
+                 loc="upper right", frameon=True, facecolor=SURFACE,
+                 fontsize=6 if compact else 8.5)
+
+
 def create_static_figure(step: int, *, cutoff: int = 500,
-                         selected: int = 11) -> tuple[Figure, tuple[Axes, Axes]]:
+                         selected: int = 11, exponent: float = 2.0
+                         ) -> tuple[Figure, tuple[Axes, Axes]]:
     if step not in STEP_TITLES:
-        raise ValueError("step must be between 1 and 4")
+        raise ValueError("step must be between 1 and 5")
     if cutoff < 2:
         raise ValueError("cutoff must be at least 2")
     if not (2 <= selected <= cutoff):
@@ -321,14 +404,16 @@ def create_static_figure(step: int, *, cutoff: int = 500,
         _draw_step_2(left, right, data, selected)
     elif step == 3:
         _draw_step_3(left, right, data)
-    else:
+    elif step == 4:
         _draw_step_4(left, right, data)
+    else:
+        _draw_step_5(left, right, cutoff, exponent)
     return fig, (left, right)
 
 
 def export_figures(output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
-    for step in range(1, 5):
+    for step in range(1, 6):
         fig, _ = create_static_figure(step)
         target = output_dir / f"experiment-04-step-{step}.svg"
         fig.savefig(target, format="svg", facecolor=fig.get_facecolor(),
@@ -342,62 +427,72 @@ def export_figures(output_dir: Path) -> None:
 
 
 class InteractiveOverview:
-    """All four coupled projections in one native dashboard."""
+    """All five coupled projections in one native dashboard."""
 
-    def __init__(self, *, cutoff: int = 500, selected: int = 11) -> None:
+    def __init__(self, *, cutoff: int = 500, selected: int = 11,
+                 exponent: float = 2.0) -> None:
         cutoff = max(50, min(2000, cutoff))
         cutoff = int(round(cutoff / 50) * 50)
         selected = max(2, min(50, selected))
-        self.fig = plt.figure(figsize=(18, 10.5), facecolor=PAPER)
+        exponent = max(1.1, min(3.5, exponent))
+        self.fig = plt.figure(figsize=(18, 13.5), facecolor=PAPER)
         self.fig.canvas.manager.set_window_title(
             "math-viz-lab · Gewichtete Primhöhenfasern"
         )
-        self.fig.text(0.04, 0.974,
+        self.fig.text(0.04, 0.982,
                       "GEWICHTETE PRIMHÖHENFASERN · EXPERIMENTE 002 + 003",
                       color=INK, fontsize=20, fontweight="bold", va="top")
         self.fig.text(
-            0.04, 0.937,
-            "Die Kardinalität einer Höhenfaser multipliziert das Basel-Gewicht und verändert die Summierbarkeit.",
+            0.04, 0.954,
+            "Fasermultiplizität und freier Exponent s steuern gemeinsam die Summierbarkeit.",
             color=MUTED, fontsize=10.5, va="top",
         )
         specs = {
-            1: (0.04, 0.265, 0.58, 0.895),
-            2: (0.535, 0.76, 0.58, 0.895),
-            3: (0.04, 0.265, 0.17, 0.485),
-            4: (0.535, 0.76, 0.17, 0.485),
+            1: (0.04, 0.265, 0.69, 0.915),
+            2: (0.535, 0.76, 0.69, 0.915),
+            3: (0.04, 0.265, 0.405, 0.63),
+            4: (0.535, 0.76, 0.405, 0.63),
+            5: (0.2875, 0.5125, 0.12, 0.345),
         }
         short_titles = {
             1: "Schritt 1 · Gewichtete Höhenfaser",
             2: "Schritt 2 · Multiplizität",
             3: "Schritt 3 · Partialsummen",
             4: "Schritt 4 · Primhöhenfilter",
+            5: "Schritt 5 · Freier Exponent und Schwellen",
         }
         self.panels: dict[int, tuple[Axes, Axes]] = {}
         for step, (left_x, right_x, bottom, title_y) in specs.items():
-            left = self.fig.add_axes((left_x, bottom, 0.17, 0.29), facecolor=SURFACE)
-            right = self.fig.add_axes((right_x, bottom, 0.17, 0.29), facecolor=SURFACE)
+            left = self.fig.add_axes((left_x, bottom, 0.17, 0.19), facecolor=SURFACE)
+            right = self.fig.add_axes((right_x, bottom, 0.17, 0.19), facecolor=SURFACE)
             self.panels[step] = (left, right)
             self.fig.text(left_x, title_y, short_titles[step], color=INK,
                           fontsize=12, fontweight="bold")
 
         self.cutoff_slider = Slider(
-            self.fig.add_axes((0.12, 0.065, 0.27, 0.020), facecolor=SURFACE),
+            self.fig.add_axes((0.12, 0.035, 0.16, 0.015), facecolor=SURFACE),
             "Summengrenze M", 50, 2000, valinit=cutoff, valstep=50,
             color=PALE_ORANGE,
         )
         self.selected_slider = Slider(
-            self.fig.add_axes((0.53, 0.065, 0.22, 0.020), facecolor=SURFACE),
+            self.fig.add_axes((0.37, 0.035, 0.17, 0.015), facecolor=SURFACE),
             "Höhenfaser n", 2, 50, valinit=selected, valstep=1,
             color=PALE_ORANGE,
         )
+        self.exponent_slider = Slider(
+            self.fig.add_axes((0.64, 0.035, 0.14, 0.015), facecolor=SURFACE),
+            "Exponent s", 1.1, 3.5, valinit=exponent, valstep=0.1,
+            color=PALE_ORANGE,
+        )
         self.export_button = Button(
-            self.fig.add_axes((0.86, 0.048, 0.11, 0.05)), "SVG-Export",
+            self.fig.add_axes((0.86, 0.019, 0.11, 0.045)), "SVG-Export",
             color=SURFACE, hovercolor=PALE_ORANGE,
         )
-        self.status = self.fig.text(0.50, 0.515, "", ha="center", color=PURPLE,
+        self.status = self.fig.text(0.50, 0.365, "", ha="center", color=PURPLE,
                                     fontsize=9.2, fontweight="bold")
         self.cutoff_slider.on_changed(self._on_change)
         self.selected_slider.on_changed(self._on_change)
+        self.exponent_slider.on_changed(self._on_change)
         self.export_button.on_clicked(self._on_export)
         self._redraw()
 
@@ -412,6 +507,7 @@ class InteractiveOverview:
     def _redraw(self) -> None:
         cutoff = int(self.cutoff_slider.val)
         selected = int(self.selected_slider.val)
+        exponent = float(self.exponent_slider.val)
         data = series_data(cutoff)
         for left, right in self.panels.values():
             left.clear()
@@ -420,6 +516,7 @@ class InteractiveOverview:
         _draw_step_2(*self.panels[2], data, selected, compact=True)
         _draw_step_3(*self.panels[3], data, compact=True)
         _draw_step_4(*self.panels[4], data, compact=True)
+        _draw_step_5(*self.panels[5], cutoff, exponent, compact=True)
         for left, right in self.panels.values():
             for axis in (left, right):
                 axis.title.set_fontsize(9)
@@ -427,8 +524,8 @@ class InteractiveOverview:
                 axis.yaxis.label.set_fontsize(8)
                 axis.tick_params(labelsize=7)
         self.status.set_text(
-            f"Aktiver Zustand: M={cutoff}, n={selected} · |H_n|={selected-1}, "
-            f"μ(H_n)={full_fiber_mass(selected):.6f}, "
+            f"Aktiver Zustand: M={cutoff}, n={selected}, s={exponent:.1f} · "
+            f"|H_n|={selected-1}, μ(H_n)={full_fiber_mass(selected):.6f}, "
             f"Primfasersumme P_M={data.prime_fiber_sums[-1]:.6f}"
         )
         self.fig.canvas.draw_idle()
@@ -438,7 +535,7 @@ class InteractiveOverview:
 
 
 def check_layout() -> None:
-    for step in range(1, 5):
+    for step in range(1, 6):
         fig, (left, right) = create_static_figure(step)
         fig.canvas.draw()
         lp, rp = left.get_position(), right.get_position()
@@ -452,10 +549,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--export", action="store_true", help="regenerate SVG figures")
     parser.add_argument("--check-layout", action="store_true", help="verify panel dimensions")
-    parser.add_argument("--step", type=int, choices=range(1, 5),
+    parser.add_argument("--step", type=int, choices=range(1, 6),
                         help="show only one detailed projection")
     parser.add_argument("--cutoff", type=int, default=500, help="summation cutoff M")
     parser.add_argument("--selected", type=int, default=11, help="selected height n")
+    parser.add_argument("--exponent", type=float, default=2.0,
+                        help="power exponent s for step 5")
     parser.add_argument("--output", type=Path, default=EXPERIMENT_DIR / "renders")
     args = parser.parse_args()
     if args.export:
@@ -463,10 +562,12 @@ def main() -> None:
     elif args.check_layout:
         check_layout()
     elif args.step is None:
-        InteractiveOverview(cutoff=args.cutoff, selected=args.selected).show()
+        InteractiveOverview(cutoff=args.cutoff, selected=args.selected,
+                            exponent=args.exponent).show()
     else:
         fig, _ = create_static_figure(args.step, cutoff=args.cutoff,
-                                      selected=args.selected)
+                                      selected=args.selected,
+                                      exponent=args.exponent)
         fig.canvas.manager.set_window_title(
             "math-viz-lab · Gewichtete Primhöhenfasern"
         )

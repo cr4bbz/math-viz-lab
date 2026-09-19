@@ -12,10 +12,10 @@ lineage:
     - "003-basel-problem"
 
 object:
-  family: "H_n={(a,b)∈ℕ₊² | a+b=n} with point weight w(a,b)=1/n²"
-  parameter_space: "height n ∈ ℕ, summation cutoff N ∈ ℕ"
+  family: "H_n={(a,b)∈ℕ₊² | a+b=n} with point weight w_s(a,b)=1/n^s"
+  parameter_space: "height n ∈ ℕ, summation cutoff N ∈ ℕ, exponent s ∈ ℝ"
   state_space: "positive lattice points (a,b), height fibers H_n, and prime-filtered heights"
-  solution_locus: "fiber masses μ(H_n)=(n−1)/n² and their partial sums"
+  solution_locus: "fiber masses μ_s(H_n)=(n−1)/n^s and their convergence regions"
 
 paths:
   renderer: "experiments/004-weighted-prime-height-fibers/render.py"
@@ -30,10 +30,11 @@ view:
     - "constant point weight 1/n² ↦ total fiber mass |H_n|/n²"
     - "fiber-mass prefix ↦ partial sum T_N=H_N−S_N"
     - "height index n ↦ prime-filtered contribution 1_Prime(n)·μ(H_n)"
+    - "fixed exponent 2 ↦ free exponent s with shifted convergence threshold"
   default_state: "weighted-fiber-11"
 
 research:
-  question: "Wie verändert die Fasermultiplizität |H_n|=n−1 das konvergente Basel-Gewicht 1/n², und bleibt die resultierende Reihe nach dem Primhöhenfilter summierbar?"
+  question: "Wie verändern Fasermultiplizität und Exponent s die Summierbarkeit von 1/n^s, und bleibt der Effekt nach dem Primhöhenfilter bestehen?"
   observations:
     - id: "obs-multiplicity-11"
       statement: "Auf H₁₁ werden zehn gleiche Punktgewichte 1/121 zur Fasermasse 10/121 akkumuliert."
@@ -43,6 +44,10 @@ research:
       statement: "Bis N=500 stabilisiert sich die Basel-Partialsumme sichtbar, während die Fasersumme weiter wächst."
       evidence: "numerical_evidence"
       state: "partial-sums-500"
+    - id: "obs-exponent-gap"
+      statement: "Im Bereich 1<s≤2 liegt die Punktreihe bereits im Konvergenzgebiet, die Faserreihe jedoch noch im Divergenzgebiet."
+      evidence: "lean_proved"
+      state: "exponent-threshold-s-2"
   conjectures: []
   proved_claims:
     - id: "claim-complete-visible-mass"
@@ -65,14 +70,30 @@ research:
       statement: "Auch die Teilreihe der gewichteten Primhöhenfasern ist nicht summierbar."
       evidence: "lean_proved"
       theorem: "MathVizLab.prime_fullFiberMass_not_summable"
+    - id: "claim-power-fiber-decomposition"
+      statement: "Die Fasermultiplizität zerlegt den Term in n^(1−s)−n^(−s)."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.powerFiberTerm_decomposition"
+    - id: "claim-power-fiber-convergence"
+      statement: "Für s>2 ist die gewichtete Faserreihe summierbar."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.powerFiberTerm_summable_of_two_lt"
+    - id: "claim-power-fiber-transition-divergence"
+      statement: "Für 1<s≤2 ist die gewichtete Faserreihe nicht summierbar."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.powerFiberTerm_not_summable_of_one_lt_le_two"
+    - id: "claim-power-threshold-classification"
+      statement: "Die Punktreihe konvergiert genau für s>1; in diesem Bereich konvergiert die Faserreihe genau für s>2."
+      evidence: "lean_proved"
+      theorem: "MathVizLab.powerPointTerm_summable_iff / MathVizLab.powerFiberTerm_summable_iff_of_one_lt"
 
 render:
   format: "svg"
   browser_based: false
   deterministic: true
   native_interactive_overview: true
-  simultaneous_steps: [1, 2, 3, 4]
-  controls: ["summation cutoff M", "selected height n"]
+  simultaneous_steps: [1, 2, 3, 4, 5]
+  controls: ["summation cutoff M", "selected height n", "power exponent s"]
   axes_required: true
   legends_required: true
   equal_comparison_panels: true

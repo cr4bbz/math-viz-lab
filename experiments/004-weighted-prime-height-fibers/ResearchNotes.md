@@ -86,8 +86,8 @@ Da `S_N` konvergiert und `H_N` divergiert, ist auch die Faserreihe nicht
 summierbar. Bei `N=500` lauten die numerischen Werte
 
 \[
-S_{500}\approx1{,}642936,quad
-H_{500}\approx6{,}792823,quad
+S_{500}\approx1{,}642936,\qquad
+H_{500}\approx6{,}792823,\qquad
 T_{500}\approx5{,}149887.
 \]
 
@@ -116,6 +116,39 @@ Partialsumme wächst sehr langsam; ein endliches Diagramm allein könnte deshalb
 fälschlich einen Grenzwert nahelegen. Gerade hier ist die Trennung zwischen
 Visualisierung und Lean-Beweis entscheidend.
 
+### Schritt 5: Vom festen Basel-Exponenten zum freien Exponenten
+
+Das Basel-Gewicht wird zur Familie
+
+\[
+w_s(n)=\frac1{n^s},\qquad s\in\mathbb R.
+\]
+
+Auf einer vollständigen Höhenfaser wird daraus
+
+\[
+\mu_s(H_n)=\frac{n-1}{n^s}
+           =n^{1-s}-n^{-s}.
+\]
+
+Die Projektion auf den Exponenten `s` verwirft die konkreten Einzelindizes und
+behält nur die asymptotische Abfallklasse. Für die Punktreihe liegt die bekannte
+Konvergenzschwelle bei `s=1`. Die zusätzliche Fasermultiplizität `n−1`
+verringert den effektiven Exponenten um eins; daher liegt die Schwelle der
+Faserreihe bei `s=2`.
+
+Besonders aufschlussreich ist der Zwischenbereich
+
+\[
+1<s\le2.
+\]
+
+Dort konvergiert `Σn⁻ˢ`, aber `Σ(n−1)n⁻ˢ` nicht. Die linke Ansicht zeigt die
+beiden Partialsummen für den gewählten Exponenten. Die rechte Schwellenkarte
+zeigt beide Konvergenzgebiete gleichzeitig und markiert `s=1`, `s=2` sowie den
+interaktiv gewählten Wert. Die endlichen Kurven sind visuelle beziehungsweise
+numerische Evidenz; die Aussagen für `1<s≤2` und `s>2` sind in Lean bewiesen.
+
 ## 3. Was die Projektionen zeigen und verwerfen
 
 | Projektion | sichtbar | verworfen | relevante Faser |
@@ -124,6 +157,7 @@ Visualisierung und Lean-Beweis entscheidend.
 | Punktgewichte `↦μ(H_n)` | Gesamtmasse | einzelne Beiträge | alle `n−1` gleichen Gewichte |
 | Termfolge `↦T_N` | Akkumulation | Herkunft eines Beitrags | Folgen mit gleicher endlicher Summe |
 | `n↦1_Prime(n)` | Primhöhen | zusammengesetzte Höhen | alle Indizes mit gleichem Filterwert |
+| `s↦Konvergenzklasse` | kritischer Exponent | einzelne Folgenterme | Exponenten mit gleichem Summierbarkeitsstatus |
 
 Die entscheidende Informationsgröße ist nicht nur der Wert auf dem Bildraum,
 sondern die Multiplizität seiner Urbilder.
@@ -136,6 +170,7 @@ sondern die Multiplizität seiner Urbilder.
 | `multiplicity-factor-11` | `lean_proved` | der Faktor ist `|H₁₁|=10` |
 | `partial-sums-500` | `lean_proved` | `T_N=H_N−S_N`; die Reihe divergiert |
 | `prime-filter-500` | `lean_proved` | der Primfilter beseitigt die Divergenz nicht |
+| `exponent-threshold-s-2` | `lean_proved` | die Faser verschiebt die Schwelle von 1 auf 2 |
 
 Die in den Zuständen gespeicherten Dezimalwerte sind reproduzierbare endliche
 Auswertungen. `lean_proved` bezieht sich jeweils auf die ausdrücklich benannten
@@ -152,7 +187,11 @@ beiden Elternexperimente. Es formalisiert:
 - die endliche Summenidentität `T_N=H_N−S_N`,
 - die Nicht-Summierbarkeit aller gewichteten Fasern,
 - die Nicht-Summierbarkeit der gewichteten Primhöhenfasern mithilfe von
-  `Nat.Primes.not_summable_one_div` aus mathlib.
+  `Nat.Primes.not_summable_one_div` aus mathlib,
+- `powerPointTerm` und `powerFiberTerm` für reelle Exponenten,
+- die Exponentenzerlegung `n^(1−s)−n^(−s)`,
+- die Klassifikation der Punktreihe durch `s>1`,
+- innerhalb dieses Bereichs die exakte Faserklassifikation durch `s>2`.
 
 ## 6. Forschungsprotokoll
 
@@ -171,6 +210,23 @@ beiden Elternexperimente. Es formalisiert:
 - **Schluss:** Fasermultiplizität ist eine mathematisch wirksame Information.
   Sie darf bei Projektionen gewichteter Mengen nicht stillschweigend verloren
   gehen.
-- **Nächste Projektion:** Ersetze `1/n²` durch `1/n^s` und untersuche die
-  kritische Exponentverschiebung: Auf den Fasern verhält sich das Gewicht wie
-  `n^{1-s}`, sodass die Konvergenzschwelle von `s>1` zu `s>2` wandert.
+- **Nächste Projektion:** Ersetze die zweidimensionale Höhenfaser durch
+  `d`-dimensionale Kompositionsfasern. Ihre Kardinalität wächst wie
+  `n^(d−1)`; zu untersuchen ist die allgemeine Schwellenverschiebung von
+  `s>1` zu `s>d`.
+
+### 2026-09-19 — Freier Exponent und verschobene Schwelle
+
+- **Zustand:** `exponent-threshold-s-2`
+- **Frage:** Wo liegt die Konvergenzschwelle nach Multiplikation mit der
+  Fasergröße `n−1`?
+- **Projektion:** feste Potenz `2` auf freien reellen Exponenten `s`
+- **Beobachtung:** Die kritische Grenze wandert von `s=1` auf `s=2`.
+- **Evidenzklasse:** `lean_proved` für `s>2` und `1<s≤2`; endliche
+  Partialsummen zusätzlich `numerical_evidence`
+- **Verworfene Information:** Die Schwellenkarte zeigt nur den
+  Summierbarkeitsstatus und nicht den Summenwert oder die
+  Konvergenzgeschwindigkeit.
+- **Lean:** `powerPointTerm_summable_iff` und
+  `powerFiberTerm_summable_iff_of_one_lt`
+- **Nächste Projektion:** Dimension der Faser als zweiter freier Parameter.
